@@ -92,18 +92,24 @@
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.php"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.php"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<?php
-if(!empty($_SESSION["cart"])) {
-$cart_count = count(array_keys($_SESSION["cart"]));
+<?php									
+if(!empty($_SESSION['cart'])){
+	$c_count =count($_SESSION['cart']);
+}else{echo "Cart(0)";}
+?>
+<!--</a></li>
+<?php
+// if(!empty($_SESSION["cart"])) {
+// $cart_count = count($_SESSION["cart"]);
 ?>
 <div class="cart_div">
-<a href="cart.php"><img src="cart-icon.png" /> Cart<span>
-<?php echo $cart_count; ?></span></a>
+<a href="cart.php"><i class="fa fa-sh"></i> Cart<span>
+<?php // echo $cart_count; ?></span></a>
 </div>
 <?php
-}
-?>
-<!-- <?php
+// }else { echo "(0)"; }
+ ?>
+<?php
 $result = mysqli_query($con,"SELECT * FROM products");
 while($row = mysqli_fetch_assoc($result)){
     echo "<div class='product_wrapper'>

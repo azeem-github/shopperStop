@@ -25,22 +25,31 @@ include 'header.php';
 						<h2>Category</h2>
 						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
 							<div class="panel panel-default">
-								 <?php 
-                            $query = mysqli_query($conn, "SELECT * FROM categories");
-                            while($rows = mysqli_fetch_array($query)){ ?>
+							<?php
+							if(isset($_GET['addCart'])){
+								$id = $_GET['id'];
+							}
+							  $query = mysqli_query($conn, "SELECT * FROM categories");
+							  //  echo "<pre>"; print_r($query); echo "</pre>"; exit;
+							  while($rows = mysqli_fetch_array($query)){
+							  //   echo "<pre>"; print_r($rows); echo "</pre>"; 
+								  $count = mysqli_query($conn, "SELECT id FROM products WHERE products.category = $rows[id]");
+								  $prodCount = mysqli_num_rows($count);
+								  ?>
 								<div class="panel-heading">
-									<?php ?>
-									<h4 class="panel-title">
-										<a href="categories.php?id=<?php echo $rows['id']; ?>">
+								<h4 class="panel-title"><a href="categories.php?id=<?php echo $rows['id']; ?>">
 										<img src="images/IMAGES/<?php echo $rows['image']; ?>" height="20" width="20" alt="" />
-										<?php echo $rows['category']; ?></a></h4>
+										<?php echo $rows['category']; ?>
+										<span class="pull-right">(<?php echo $prodCount; ?>)</span>
+										</a>
+										</h4>
 								</div>
-								 <?php } ?>
-								
-								</div>
+                                <?php } ?>
+							</div>
+					
 						</div><!--/category-productsr-->
 					
-						<div class="brands_products"><!--brands_products-->
+						<!-- <div class="brands_products"><!--brands_products
 							<h2>Brands</h2>
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
@@ -53,8 +62,8 @@ include 'header.php';
 									<li><a href=""> <span class="pull-right">(4)</span>Rösch creative culture</a></li>
 								</ul>
 							</div>
-						</div><!--/brands_products-->
-						
+						</div>brands_products
+						 -->
 						<div class="price-range"><!--price-range-->
 							<h2>Price Range</h2>
 							<div class="well">

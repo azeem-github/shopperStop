@@ -1,36 +1,68 @@
 <?php
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
+// session_unset();
 require 'config/config.php';
-$status="";
-if (isset($_POST['addCart']) && $_POST['addCart']=="remove"){
-if(!empty($_SESSION["addCart"])) {
-    foreach($_SESSION["addCart"] as $key => $value) {
-      if($_POST["id"] == $key){
-      unset($_SESSION["addCart"][$key]);
-      $status = "<div class='box' style='color:red;'>
-      Product is removed from your cart!</div>";
-      }
-      if(empty($_SESSION["addCart"]))
-      unset($_SESSION["addCart"]);
-      } 
-}
-}
- 
-if (isset($_POST['addCart']) && $_POST['addCart']){
-  foreach($_SESSION["addCart"] as &$value){
-    if($value['id'] === $_POST["id"]){
-        $value['quantity'] = $_POST["quantity"];
-        break; // Stop the loop after we've found the product
-    }
-}
-   
-}
-?>
-<?php
-
-define('title', 'Cart | E-Shopper');
 include 'header.php';
-?>
+define('title', 'Cart | E-Shopper');
+$status="";
+
+
+// // DELETE BUtton
+//  if (isset($_POST['addCart']) && $_POST['addCart']=="remove"){
+// if(!empty($_SESSION["addCart"])) {
+//     foreach($_SESSION["addCart"] as $key => $value) {
+//       if($_POST["prodId"] == $key){
+//       unset($_SESSION["addCart"][$key]);
+//       $status = "<div class='box' style='color:red;'>
+//       Product is removed from your cart!</div>";
+//       }
+//       if(empty($_SESSION["addCart"]))
+//       unset($_SESSION["addCart"]);
+//       } 
+// }
+// }
+
+
+// ADD to Cart
+// if(isset($_SESSION['prodId'])){
+// 	$sql = mysqli_query($conn, "SELECT * FROM products where id='$_SESSION[prodId]'");
+//  while($cartRows = mysqli_fetch_assoc($sql)){
+// 	if(isset($_SESSION['cart'])){
+//  // if (isset($_POST['addCart']) && $_POST['addCart']){
+//  //  foreach($_SESSION["addCart"] as $key => $value){
+//     if($value['id'] === $_POST["id"]){
+//         $value['quantity'] = $_POST["quantity"];
+//         break; // Stop the loop after we've found the product
+//     }
+// }
+//    }
+// }
+
+// Add to cart Funtionality
+if(isset($_SESSION['prodId'])){ //echo 0;
+	$sql = mysqli_query($conn, "SELECT * FROM products WHERE id='$_SESSION[prodId]'"); //echo 1;
+    // $j=1;
+	// while($cartRows = mysqli_fetch_assoc($sql)){ echo 2;
+		do{
+        if(isset($_SESSION['cart'])){ //echo 3;
+			$items = array_column($_SESSION['cart'], 'short_description'); //echo 4;
+			$prod = $cartRows['short_description']; //echo 5;
+			if(in_array($prod, $items)){			}
+			else{ //echo 6;
+				$count = count($_SESSION['cart']); //echo 7;
+				// $_SESSION["cartItems"]= $count+1; //echo 8;
+				$_SESSION['cart'][$count] = $cartRows; //echo 9;
+				echo "<script>alert('Item added to cart');</script>"; 
+			}
+		}else{ echo 10;
+			// $_SESSION["cartItems"] = 1;
+			$_SESSION['cart']['0'] = $cartRows; echo 11;
+			echo "<script>alert('Item added to cart');</script>"; 
+		}
+		}
+        while($cartRows = mysqli_fetch_assoc($sql));
+	}
+?>	
 
 	<section id="cart_items">
 		<div class="container">
@@ -43,40 +75,39 @@ include 'header.php';
 			<div class="table-responsive cart_info">
 			<div class="cart">
 <?php
-if(isset($_SESSION["addCart"])){
-    $total_price = 0;
+if(isset($_SESSION['cart'])){ 
+    $total_price = 0; 
 ?>
 				<table class="table table-condensed">
-					<tbody>
+					<thead style="background-color: orange; color:black;">
 
 						<tr>
 							<td class="id">S.No</td>
 							<td class="image">Product</td>
 							<td class="description">Description</td>
-							<td class="mro">Price</td>
+							<td class="mrp">Price</td>
 							<td class="quantity">Quantity</td>
 							<td class="total">Total</td>
 							<td class="delete">Action</td>
 							
 						</tr>
-						<?php 
-foreach ($_SESSION["addCart"] as $product){
+<?php 
+$n =1;
+foreach($_SESSION['cart'] as $key=>$product){
 ?>
-					<!--</thead> --> 
-					<tr>
+					</thead> 
+                    <tbody style="background-color: white; color:black;">
+<tr>
+<td><?php echo $n; ?></td>
 <td>
-<img src='<?php echo $product["image"]; ?>' width="50" height="40" />
+<img src="images/Uploads/<?php echo $product['image']; ?>" width="50" height="40" />
 </td>
 <td><?php echo $product["short_description"]; ?><br />
-<form method='post' action=''>
-<input type='hidden' name='id' value="<?php echo $product["id"]; ?>" />
-<input type='hidden' name='action' value="remove" />
-<button type='submit' class='remove'>Remove Item</button>
-</form>
+
 </td>
 <td>
 <form method='post' action=''>
-<input type='hidden' name='id' value="<?php echo $product["id"]; ?>" />
+<input type='hidden' name='prodId' value="<?php echo $product["prodId"]; ?>" />
 <input type='hidden' name='addCart' value="change" />
 <select name='quantity' class='quantity' onChange="this.form.submit()">
 <option <?php if($product["quantity"]==1) echo "selected";?>
@@ -92,22 +123,33 @@ value="5">5</option>
 </select>
 </form>
 </td>
+
 <td><?php echo "$".$product["mrp"]; ?></td>
 <td><?php echo "$".$product["mrp"]*$products["quantity"]; ?></td>
+<td>
+<form method='post' action=''>
+    <input type='hidden' name='prodId' value="<?php echo $product["prodId"]; ?>" />
+    <input type='hidden' name='action' value="remove" />
+    <button type='submit' class='btn btn-danger'>Remove Item</button>
+</form>
+</td>
 </tr>
+
 <?php
 $total_price += ($product["mrp"]* $products["quantity"]);
+$n++;
 }
 ?>
 <tr>
 <td colspan="5" align="right">
-<strong>TOTAL: <?php echo "$".$total_price; ?></strong>
+<strong>TOTAL: <span style="background-color: orange; color:black;"><?php echo "$".$total_price; ?></span></strong>
 </td>
 </tr>
 </tbody>
 </table> 
   <?php
-}else{
+}else{ echo 999;
+	// echo "<pre>"; print_r($_SESSION('cart')); echo "</pre>";
  echo "<h2>Your cart is empty!</h2>";
  }
 ?>
@@ -119,99 +161,10 @@ $total_price += ($product["mrp"]* $products["quantity"]);
 <?php echo $status; ?>
 </div>
 
-						<!---<tr>
-						<td class="id">
-								<a href="">1</a>
-							</td>
-							<td class="cart_product">
-								<a href=""><img src="images/cart/one.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-							<i class="btn btn-warning" href="">
-								<i class="fa fa-trash-o"></i>
-								</i>
-							</td>
-						</tr>
+						
+	</section> </#cart_items-->
 
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="images/cart/two.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								 <i class="btn btn-warning" href="">
-								<i class="fa fa-trash-o"></i>
-								</i>
-							</td>
-						</tr>
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="images/cart/three.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<i class="btn btn-warning" href="">
-								<i class="fa fa-trash-o"></i> 
-								</i> 
-							</td>
-						</tr>--->
-
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</section> <!--/#cart_items-->
-
-	<section id="do_action">
+	 <section id="do_action">
 		<div class="container">
 			<div class="heading">
 				<h3>What would you like to do next?</h3>
@@ -286,6 +239,6 @@ $total_price += ($product["mrp"]* $products["quantity"]);
 				</div>
 			</div>
 		</div>
-	</section><!--/#do_action-->
+	</section> 
 
 <?php include 'footer.php'; ?>
