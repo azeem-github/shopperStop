@@ -91,12 +91,17 @@
 								<li><a href=""><i class="fa fa-user"></i> Account</a></li>
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.php"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart.php"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-<?php									
+								<li><a href="cart.php"><i class="fa fa-shopping-cart"><?php									
 if(!empty($_SESSION['cart'])){
 	$c_count =count($_SESSION['cart']);
 }else{echo "Cart(0)";}
-?>
+?></i> </a></li>
+<!-- <?php									
+// if(!empty($_SESSION['cart'])){
+// 	$c_count =count($_SESSION['cart']);
+// }else{echo "Cart(0)";}
+?> -->
+
 <!--</a></li>
 <?php
 // if(!empty($_SESSION["cart"])) {

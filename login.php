@@ -1,4 +1,5 @@
 <?php 
+session_start();
 define('title', 'Forms | E-Shopper');
 include 'header.php'; 
 ?>
@@ -23,6 +24,7 @@ if(isset($_POST['login'])){
 $conn = mysqli_connect('localhost', 'root', '', 'ecom');
 //echo "SELECT * FROM user WHERE email= '$email' and password = '$password'"; 
 //exit();
+
 
 $query = myssqli_query($conn, "SELECT * FROM users WHERE email= '$email' and password = '$password'");
 if(mysqli_num_rows($query) > 0){

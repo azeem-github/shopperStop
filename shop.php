@@ -1,26 +1,136 @@
 <?php 
-require 'config/config.php';
-if(isset($_GET['id'])){
-	$id = $_GET['id'];
-   $query2 = mysqli_query($conn, "SELECT short_description, mrp, image FROM products WHERE category=$id");
-} else {
-	$query2 = mysqli_query($conn, "SELECT short_description, mrp, image FROM products");
-
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
+session_start();
+if($_SESSION['email'] == ''){
+  header('Location: login.php');
 }
-define('title', 'Shop | E-Shopper');
-include 'header.php'; 
-?>
+require "config/config.php";
+$title = "Home | E-Shopper";
+include "header.php";
 
-	<section id="advertisement">
-		<div class="container">
-			<img src="images/shop/advertisement.jpg" alt="" />
-		</div>
-	</section>
+//
+$limit = 3;
+if(isset($_GET['page'])){
+$page = $_GET['page'];
+}else{
+	$page=1;
+}
+$offset = ($page - 1) * $limit;
+
+
+//ADD Item To Cart
+if(isset($_POST['addCart'])){
+	 $_SESSION['prodId'] = $_POST['id'];
+	echo "<script>window.location.href='cart.php';</script>";
+}
+
+if (isset($_POST['prodId']) && $_POST['prodId']!=""){
+	$prodId = $_POST['prodId'];
+	$result = mysqli_query(
+	$con,
+	"SELECT * FROM products WHERE id='$prodId'"
+	);
+	$row = mysqli_fetch_assoc($result);
+	$image = $row['image'];
+	$short_description = $row['short_description'];
+	$mrp = $row['mrp'];
 	
+	
+	$cartArray = array(
+		$prodId=>array(
+		'image'=>$image,
+		'short_description'=>$short_description,
+		'mrp'=>$mrp,
+		'quantity'=>1)
+	);
+	
+	// if(empty($_SESSION["shopping_cart"])) {
+	// 	if(empty($_SESSION["cart"])) {
+	// 	// $_SESSION["shopping_cart"] = $cartArray;
+	// 	$_SESSION["cart"] = $cartArray;
+	// 	$status = "<div class='box'>Product is added to your cart!</div>";
+	// }else{
+	// 	// $array_keys = array_keys($_SESSION["shopping_cart"]);
+	// 	$array_keys = array_keys($_SESSION["cart"]);
+	// 	if(in_array($prodId,$array_keys)) {
+	// 	$status = "<div class='box' style='color: orange;'>
+	// 	Product is already added to your cart!</div>";	
+	// 	} else {
+	// 	// $_SESSION["shopping_cart"] = array_merge(
+	// 		$_SESSION["addCart"] = array_merge(
+	// 	// $_SESSION["shopping_cart"],
+	// 	$_SESSION["cart"],
+	// 	$cartArray
+	// 	);
+	// 	$status = "<div class='box'>Product is added to your cart!</div>";
+	// 	}
+	
+	// 	}
+	 }
+
+	 $sql = mysqli_query($conn, "SELECT * from carousel");
+	 ?>
+			 <section id="slider"><!--slider-->
+			 <div class="container">
+				 <div class="row">
+					 <div class="col-sm-12">
+						 <div id="slider-carousel" class="carousel slide" data-ride="carousel">
+	 
+							 <!-- Indicators -->
+							 <ol class="carousel-indicators">
+						 <?php
+						 $a = 0;
+						 foreach($sql as $row){
+							 $active = '';
+							 if($a == 0){
+								 $active = "active";
+							 }
+						 ?>
+								 <li data-target="#slider-carousel" data-slide-to="<?php echo $a; ?>" class="<?php echo $active; ?>"></li>
+								 <?php $a++; } ?>
+							 </ol>
+							 <!-- Wrapper for slides -->
+							 <div class="carousel-inner">
+								 <?php
+								 $a = 0;
+								 foreach($sql as $row){
+									 $active = ''; 
+									 if($a == 0){
+										 $active = "active";
+									 }
+								 ?>
+								 <div class="item <?php echo $active; ?>">
+									 <div class="col-sm-6">
+										 <h1><span>E</span>-SHOPPER</h1>
+										 <h2>Free E-Commerce Template</h2>
+										 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+										 <button type="button" class="btn btn-default get">Get it now</button>
+									 </div>
+									 <div class="col-sm-6">
+										 <img src="images/carousel/<?= $row['image']?>" class="girl img-responsive" alt="" />
+										 <img src="images/carousel/pricing.png"  class="pricing" alt="" />
+									 </div>
+								 </div>							
+								 <?php $a++; } ?>
+							 </div>
+	 
+							 <!-- Left and right controls -->
+							 <a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
+								 <i class="fa fa-angle-left"></i>
+							 </a>
+							 <a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
+								 <i class="fa fa-angle-right"></i>
+							 </a>
+						 </div>
+						 
+					 </div>
+				 </div>
+			 </div>
+		 </section><!--/slider-->
 	<section>
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-3">
+<div class="col-sm-3">
 					<div class="left-sidebar">
 						<h2>Category</h2>
 						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
@@ -30,7 +140,7 @@ include 'header.php';
 								$id = $_GET['id'];
 							}
 							  $query = mysqli_query($conn, "SELECT * FROM categories");
-							  //  echo "<pre>"; print_r($query); echo "</pre>"; exit;
+							  
 							  while($rows = mysqli_fetch_array($query)){
 							  //   echo "<pre>"; print_r($rows); echo "</pre>"; 
 								  $count = mysqli_query($conn, "SELECT id FROM products WHERE products.category = $rows[id]");
@@ -48,58 +158,78 @@ include 'header.php';
 							</div>
 					
 						</div><!--/category-productsr-->
-					
-						<!-- <div class="brands_products"><!--brands_products
-							<h2>Brands</h2>
-							<div class="brands-name">
-								<ul class="nav nav-pills nav-stacked">
-									<li><a href=""> <span class="pull-right">(50)</span>Acne</a></li>
-									<li><a href=""> <span class="pull-right">(56)</span>Grüne Erde</a></li>
-									<li><a href=""> <span class="pull-right">(27)</span>Albiro</a></li>
-									<li><a href=""> <span class="pull-right">(32)</span>Ronhill</a></li>
-									<li><a href=""> <span class="pull-right">(5)</span>Oddmolly</a></li>
-									<li><a href=""> <span class="pull-right">(9)</span>Boudestijn</a></li>
-									<li><a href=""> <span class="pull-right">(4)</span>Rösch creative culture</a></li>
-								</ul>
-							</div>
-						</div>brands_products
-						 -->
 						<div class="price-range"><!--price-range-->
 							<h2>Price Range</h2>
-							<div class="well">
+							<div class="well text-center">
 								 <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
-								 <b>$ 0</b> <b class="pull-right">$ 600</b>
+								 <b class="pull-left">$ 0</b> <b class="pull-right">$ 600</b>
 							</div>
 						</div><!--/price-range-->
 						
 						<div class="shipping text-center"><!--shipping-->
 							<img src="images/home/shipping.jpg" alt="" />
 						</div><!--/shipping-->
-						
+					
 					</div>
 				</div>
-				
+			
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
-						<h2 class="title text-center">Features Items</h2>
-
-						    <?php
+						<h2 class="title text-center">Featured Items</h2>
 						
-                         while($row = mysqli_fetch_assoc($query2)){
-                            // print_r($row);
-                        ?>
-						<div class="col-sm-4">			
+						<?php
+						// if(isset($_GET['id'])){
+						// 	$id = $_GET['id'];
+						//    $query2 = mysqli_query($conn, "SELECT * FROM products WHERE category=$id");
+						//    var_dump($query2);
+						   											 
+                        //  while($row = mysqli_fetch_array($query2)){
+                        //     print_r($row);
+
+						$query2 = mysqli_query($conn, "SELECT * FROM products LIMIT " . $offset . "," .$limit);
+						while($row = mysqli_fetch_assoc($query2)){
+						 ?>
+						<div class="col-sm-4" id="allProds">			
 							<div class="product-image-wrapper">
 								<div class="single-products">
                                
-									<div class="productinfo text-center">
-										<img src="images/shop/<?php echo $row['image']; ?>" alt="" />
-											<p><?php echo $row['short_description']; ?></p>
-										<h2>$ <?php echo $row['mrp']; ?></h2>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
+									<!-- <div class="productinfo text-center">
+										<form action="" method="post" enctype="multipart/form-data">
+										<img data-enlargeable style="cursor: zoom-in" src="images/shop/<?php //echo $row['image']; ?>" alt="" />
+										<h2>$ <?php //echo $row['mrp']; ?></h2>
+											<p><?php //echo $row['short_description']; ?></p>
+											<input type="hidden" name="id" value="<?php //echo $row['id']; ?>">
+										<button type="submit" name="addCart" class="btn btn-warning" style="width:100%;"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+									</form>
+									</div> -->
 
 									
+								</div>
+								<div class="choose">
+									<ul class="nav nav-pills nav-justified">
+									</ul>
+								</div>
+							</div>
+						</div>
+                        <?php  
+				} 
+
+							$query3= mysqli_query($conn, "SELECT * FROM products");
+							while($row1 = mysqli_fetch_array($query3)){
+
+							?>	
+							<div class="col-sm-4">			
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<form action="" method="post" enctype="multipart/form-data">
+										<img data-enlargeable style="cursor: zoom-in" src="images/shop/<?php echo $row1['image']; ?>" alt="" />
+										<h2>$ <?php echo $row1['mrp']; ?></h2>
+											<p><?php echo $row1['short_description']; ?></p>
+											<input type="hidden" name="id" value="<?php echo$row1['id']; ?>">
+										<button type="submit" name="addCart" class="btn btn-warning" style="width:100%;"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+									</form>
+									</div>
 								</div>
 								<div class="choose">
 									<ul class="nav nav-pills nav-justified">
@@ -109,20 +239,90 @@ include 'header.php';
 								</div>
 							</div>
 						</div>
+					
+						<?php  } 
+						$paginaton = mysqli_query($conn, "SELECT * FROM products");
+						$count = mysqli_num_rows($paginaton);
+						if($count > 0){
+							$tot_pages = ceil($count / $limit);
+							echo "<div class='col-sm-12' id='paging'><ul class='pagination' >";
+							if($page >1){
+								echo "<li><a href='index.php?page=".($page-1)."'>Prev</a></li>";
+							}		
+							for($i=1; $i <= $tot_pages; $i++){
+								if($i == $page){
+									$active = "active";
+								}
+								else{
+									$active="";
+								}
+							echo "<li class='$active'><a href='index.php?page=".$i."'>$i</a></li>";
+							}
+							if($tot_pages > $page){
+								echo '<li><a href="index.php?page='.($page+1).'">Next</a></li>';
+							}		
+						}
+						echo "</ul></div>";
 						
-						<?php } ?>	
-
-						<ul class="pagination">
-							<li class="active"><a href="">1</a></li>
-							<li><a href="">2</a></li>
-							<li><a href="">3</a></li>
-							<li><a href="">&raquo;</a></li>
-						</ul>
-					</div><!--features_items-->
+						?> 
+				</div>
 				</div>
 			</div>
 		</div>
-	</section>
-	
-<?php include 'footer.php'; ?>
-	
+	</section>	
+	<!--  <?php
+//if(!empty($_SESSION["addCart"])) {
+//$cart_count = count(array_keys($_SESSION["addCart"]));
+?>
+<div class="cart_div">
+<a href="cart.php"><img src="cart-icon.png" /> Cart<span>
+<?php// echo $cart_count; ?></span></a>
+</div>
+<?php
+//}
+?> -->
+
+<div style="clear:both;"></div>
+
+<div class="message_box" style="margin:10px 0px;">
+<?php echo $status; ?>
+</div>
+	<?php include "footer.php"; ?>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script>
+	$('img[data-enlargeable]').addClass('img-enlargeable').click(function() {
+    var src = $(this).attr('src');
+    var modal;
+  
+    function removeModal() {
+	modal.remove();
+	$('body').off('keyup.modal-close');
+    }
+    modal = $('<div>').css({
+	background: 'RGBA(0,0,0,0.7) url(' + src + ') no-repeat center',
+	backgroundSize: 'contain',
+	width: '100%',
+	height: '100%',
+	position: 'fixed',
+	zIndex: '10000',
+	top: '0',
+	left: '0',
+	cursor: 'zoom-out'
+    }).click(function() {
+	removeModal();
+    }).appendTo('body');
+    //handling ESC
+    $('body').on('keyup.modal-close', function(e) {
+	if (e.key === 'Escape') {
+	removeModal();
+	}
+    });
+	});
+	</script>
+
+	<script>
+		$('#allProds').show(function(){
+			$('#paging').show();
+		});
+		</script>

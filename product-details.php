@@ -1,46 +1,47 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 require 'config/config.php';
 define('title', 'Product Details | E-Shopper');
-include 'header.php'; ?>
+include 'header.php'; 
+//ADD Item To Cart
+if(isset($_POST['addCart'])){
+	 $_SESSION['prodId'] = $_POST['id'];
+	echo "<script>window.location.href='cart.php';</script>";
+}
 
+ ?>
 	<section>
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-3">
+<div class="col-sm-3">
 					<div class="left-sidebar">
 						<h2>Category</h2>
 						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
 							<div class="panel panel-default">
-								<?php
-								$query = mysqli_query($conn, "SELECT * FROM categories");
-                            while($rows = mysqli_fetch_array($query)){ ?>
+							<?php
+							if(isset($_GET['addCart'])){
+								$id = $_GET['id'];
+							}
+							  $query = mysqli_query($conn, "SELECT * FROM categories");
+							  
+							  while($rows = mysqli_fetch_array($query)){
+							  //   echo "<pre>"; print_r($rows); echo "</pre>"; 
+								  $count = mysqli_query($conn, "SELECT id FROM products WHERE products.category = $rows[id]");
+								  $prodCount = mysqli_num_rows($count);
+								  ?>
 								<div class="panel-heading">
-									<?php ?>
-									<h4 class="panel-title">
-										<a href="categories.php?id=<?php echo $rows['id']; ?>">
+								<h4 class="panel-title"><a href="categories.php?id=<?php echo $rows['id']; ?>">
 										<img src="images/IMAGES/<?php echo $rows['image']; ?>" height="20" width="20" alt="" />
-										<?php echo $rows['category']; ?></a></h4>
-
-										</div>
+										<?php echo $rows['category']; ?>
+										<span class="pull-right">(<?php echo $prodCount; ?>)</span>
+										</a>
+										</h4>
+								</div>
                                 <?php } ?>
-
 							</div>
-						</div><!--/category-productsr-->
 					
-						<div class="brands_products"><!--brands_products-->
-							<h2>Brands</h2>
-							<div class="brands-name">
-								<ul class="nav nav-pills nav-stacked">
-									<li><a href=""> <span class="pull-right">(50)</span>Acne</a></li>
-									<li><a href=""> <span class="pull-right">(56)</span>Grüne Erde</a></li>
-									<li><a href=""> <span class="pull-right">(27)</span>Albiro</a></li>
-									<li><a href=""> <span class="pull-right">(32)</span>Ronhill</a></li>
-									<li><a href=""> <span class="pull-right">(5)</span>Oddmolly</a></li>
-									<li><a href=""> <span class="pull-right">(9)</span>Boudestijn</a></li>
-									<li><a href=""> <span class="pull-right">(4)</span>Rösch creative culture</a></li>
-								</ul>
-							</div>
-						</div><!--/brands_products-->
+						</div><!--/category-productsr-->
+						
 						
 						<div class="price-range"><!--price-range-->
 							<h2>Price Range</h2>
@@ -103,13 +104,12 @@ include 'header.php'; ?>
 								<p>Web ID: 1089772</p>
 								<img src="images/product-details/rating.png" alt="" />
 								<span>
-									<span>US $59</span>
-									<label>Quantity:</label>
-									<input type="text" value="3" />
-									<button type="button" class="btn btn-fefault cart">
-										<i class="fa fa-shopping-cart"></i>
-										Add to cart
-									</button>
+								<form action="" method="post" enctype="multipart/form-data">
+										<img src="images/shop/<?php echo $row['image']; ?>" alt="" />
+										<h2>$ <?php echo $row['mrp']; ?></h2>
+											<p><?php echo $row['short_description']; ?></p>
+											<input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+									<button type="submit" name="addCart" class="btn btn-warning" style="width:100%;"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
 								</span>
 								<p><b>Availability:</b> In Stock</p>
 								<p><b>Condition:</b> New</p>

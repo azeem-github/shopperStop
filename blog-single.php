@@ -1,4 +1,6 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
+require "config/config.php";
 define('title', 'Blog Single | E-Shopper');
 include 'header.php';
 ?>
@@ -11,110 +13,27 @@ include 'header.php';
 						<h2>Category</h2>
 						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
 							<div class="panel panel-default">
+
+							<?php
+							$query = mysqli_query($conn, "SELECT * FROM categories");
+							  
+							  while($rows = mysqli_fetch_array($query)){
+							  //   echo "<pre>"; print_r($rows); echo "</pre>"; 
+								  $count = mysqli_query($conn, "SELECT id FROM products WHERE products.category = $rows[id]");
+								  $prodCount = mysqli_num_rows($count);
+								  ?>
 								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Sportswear
+								<h4 class="panel-title"><a href="categories.php?id=<?php echo $rows['id']; ?>">
+										<img src="images/IMAGES/<?php echo $rows['image']; ?>" height="20" width="20" alt="" />
+										<?php echo $rows['category']; ?>
+										<span class="pull-right">(<?php echo $prodCount; ?>)</span>
 										</a>
-									</h4>
+										</h4>
 								</div>
-								<div id="sportswear" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="">Nike </a></li>
-											<li><a href="">Under Armour </a></li>
-											<li><a href="">Adidas </a></li>
-											<li><a href="">Puma</a></li>
-											<li><a href="">ASICS </a></li>
-										</ul>
-									</div>
-								</div>
+                                <?php } ?>
 							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#mens">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Mens
-										</a>
-									</h4>
-								</div>
-								<div id="mens" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="">Fendi</a></li>
-											<li><a href="">Guess</a></li>
-											<li><a href="">Valentino</a></li>
-											<li><a href="">Dior</a></li>
-											<li><a href="">Versace</a></li>
-											<li><a href="">Armani</a></li>
-											<li><a href="">Prada</a></li>
-											<li><a href="">Dolce and Gabbana</a></li>
-											<li><a href="">Chanel</a></li>
-											<li><a href="">Gucci</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#womens">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Womens
-										</a>
-									</h4>
-								</div>
-								<div id="womens" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="">Fendi</a></li>
-											<li><a href="">Guess</a></li>
-											<li><a href="">Valentino</a></li>
-											<li><a href="">Dior</a></li>
-											<li><a href="">Versace</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Kids</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Fashion</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Households</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Interiors</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Clothing</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Bags</a></h4>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Shoes</a></h4>
-								</div>
-							</div>
-						</div><!--/category-products-->
+					
+						</div><!--/category-productsr-->
 					
 						<div class="brands_products"><!--brands_products-->
 							<h2>Brands</h2>
