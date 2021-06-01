@@ -13,13 +13,12 @@ $page = $_GET['page'];
 }
 $offset = ($page - 1) * $limit;
 
-
 //ADD Item To Cart
 if(isset($_POST['addCart'])){
 	 $_SESSION['prodId'] = $_POST['id'];
 	echo "<script>window.location.href='cart.php';</script>";
 
-
+}
 
 if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 	$prodId = $_POST['prodId'];
