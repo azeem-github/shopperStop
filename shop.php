@@ -1,9 +1,9 @@
 <?php 
 if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
-session_start();
-if($_SESSION['email'] == ''){
-  header('Location: login.php');
-}
+
+// if($_SESSION['email'] == ''){
+//   header('Location: login.php');
+// }
 require "config/config.php";
 $title = "Home | E-Shopper";
 include "header.php";

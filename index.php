@@ -18,13 +18,13 @@ $offset = ($page - 1) * $limit;
 if(isset($_POST['addCart'])){
 	 $_SESSION['prodId'] = $_POST['id'];
 	echo "<script>window.location.href='cart.php';</script>";
-}
+
 
 
 if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 	$prodId = $_POST['prodId'];
 	$result = mysqli_query(
-	$con,
+	$conn,
 	"SELECT * FROM products WHERE id='$prodId'"
 	);
 	$row = mysqli_fetch_assoc($result);
@@ -41,28 +41,6 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 		'quantity'=>1)
 	);
 	
-	// if(empty($_SESSION["shopping_cart"])) {
-	// 	if(empty($_SESSION["cart"])) {
-	// 	// $_SESSION["shopping_cart"] = $cartArray;
-	// 	$_SESSION["cart"] = $cartArray;
-	// 	$status = "<div class='box'>Product is added to your cart!</div>";
-	// }else{
-	// 	// $array_keys = array_keys($_SESSION["shopping_cart"]);
-	// 	$array_keys = array_keys($_SESSION["cart"]);
-	// 	if(in_array($prodId,$array_keys)) {
-	// 	$status = "<div class='box' style='color: orange;'>
-	// 	Product is already added to your cart!</div>";	
-	// 	} else {
-	// 	// $_SESSION["shopping_cart"] = array_merge(
-	// 		$_SESSION["addCart"] = array_merge(
-	// 	// $_SESSION["shopping_cart"],
-	// 	$_SESSION["cart"],
-	// 	$cartArray
-	// 	);
-	// 	$status = "<div class='box'>Product is added to your cart!</div>";
-	// 	}
-	
-	// 	}
 	 }
 
 	 $sql = mysqli_query($conn, "SELECT * from carousel");

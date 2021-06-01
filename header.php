@@ -167,7 +167,7 @@ mysqli_close($con);
 										<li><a href="login.php">Login</a></li> 
                                     </ul>
                                 </li> 
-								<li class="dropdown"><a href="#" class="active">Blog<i class="fa fa-angle-down"></i></a>
+								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="blog.php" class="active">Blog List</a></li>
 										<li><a href="blog-single.php">Blog Single</a></li>

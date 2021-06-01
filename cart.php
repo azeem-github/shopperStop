@@ -3,7 +3,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 require 'config/config.php';
 include 'header.php';
 define('title', 'Cart | E-Shopper');
-$status="";
+// $status="";
 
 if(isset($_POST['deleteAll'])){ 
 	if(isset($_SESSION['cart'])){ 
@@ -13,15 +13,11 @@ if(isset($_POST['deleteAll'])){
 }
 
 	if(isset($_POST['delete'])){
-		
-		if(isset($_SESSION['cart'])) { //echo 1;
-		if($_POST['hId'] != ''){ //echo 2; 
-			foreach($_SESSION['cart'] as $key => $product) { //echo 3;
-		//   echo "<pre>"; print_r($product); exit();
-			if($product['id'] == $_POST['hId']){ //echo 4;
-	
-	 
-	unset($_SESSION['cart'][$key]); //echo "4.1";
+		if($_POST['hId'] != ''){ 		
+		if(isset($_SESSION['cart'])) { 
+			foreach($_SESSION['cart'] as $key => $product) { 
+			if($product['id'] == $_POST['hId']){ 
+	 unset($_SESSION['cart'][$key]); //echo "4.1";
 	unset($_SESSION['prodId']);
 		  $status = "<div class='box' style='color:red;'>
 		  Product is removed from your cart!</div>";
@@ -41,18 +37,17 @@ if(isset($_POST['deleteAll'])){
 
 
 // Add to cart Funtionality
-if(isset($_SESSION['prodId'])){ //echo 0;
-	$sql = mysqli_query($conn, "SELECT * FROM products WHERE id='$_SESSION[prodId]'"); //echo 1;
-		// do{echo 2;
+if(isset($_SESSION['prodId'])){ 
+	$sql = mysqli_query($conn, "SELECT * FROM products WHERE id='$_SESSION[prodId]'"); 
 			while($cartRows = mysqli_fetch_assoc($sql)){
-        if(isset($_SESSION['cart'])){ //echo 3;
-			$items = array_column($_SESSION['cart']); //echo 4;
-			$prod = $cartRows['short_description']; //echo 5;
+        if(isset($_SESSION['cart'])){ 
+			$items = array_column($_SESSION['cart'],'short_description'); 
+			$prod = $cartRows['short_description']; 
 			if(in_array($prod, $items)){			}
-			else{ //echo 6;
-				$count = count($_SESSION['cart']); //echo 7;
-				$_SESSION["cartItems"]=$count+1; //echo 8;
-				$_SESSION['cart'][$count] = $cartRows; //9;
+			else{ 
+				$count = count($_SESSION['cart']); 
+				$_SESSION["cartItems"]=$count+1; 
+				$_SESSION['cart'][$count] = $cartRows; 
 				echo "<script>
 				alert('Item added to cart'); 
 				</script>"; 
@@ -66,23 +61,9 @@ if(isset($_SESSION['prodId'])){ //echo 0;
 			</script>"; 
 		}
 		}
-        // while($cartRows = mysqli_fetch_assoc($sql));
 	}
 
-// // 	if (isset($_POST['action']) && $_POST['action']=="change"){
-// // 		//   foreach($_SESSION["shopping_cart"] as &$value){
-// // 			foreach($_SESSION["cart"] as &$product){
-// // 			// if($value['code'] === $_POST["code"]){
-// // 				if($product['prodId'] === $_POST["prodId"]){
-		
-// // 				$product['quantity'] = $_POST["quantity"];
-// session_unset();
-// // 				break; // Stop the loop after we've found the product
-// // 			}
-// // 		}
-			  
-// // 		}
-// // ?>	
+?>
 
 	<section id="cart_items">
 		<div class="container">
@@ -114,7 +95,7 @@ if(isset($_SESSION['cart'])){
 </thead>
 <?php		
  foreach($_SESSION['cart'] as $product){
-	// $mrp = $product['quantity']*$product['mrp'];
+
 ?>
   <tbody style="background-color: white; color:black;"> 
  <tr>
@@ -148,7 +129,6 @@ value="4">4</option>
 value="5">5</option>
 </select>
 </form>
-
 <td>
 <form method='post' action=''>
 <input type='hidden' name="hId" value="<?php echo $product['id']; ?>" />
