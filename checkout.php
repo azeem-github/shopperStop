@@ -1,7 +1,66 @@
 <?php
-define('title', 'Checkout | E-Shopper');
-include 'header.php'; ?>
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 
+require 'config/config.php';
+include 'header.php';
+define('title', 'Cart | E-Shopper');
+
+if(isset($_POST['deleteAll'])){ 
+	if(isset($_SESSION['cart'])){ 
+	session_unset(); 
+	echo "<script>alert('Cart is made empty!');</script>";
+	}
+}
+
+	if(isset($_POST['delete'])){
+		if($_POST['hId'] != ''){ 		
+		if(isset($_SESSION['cart'])) { 
+			foreach($_SESSION['cart'] as $key => $product) { 
+			if($product['id'] == $_POST['hId']){ 
+	 unset($_SESSION['cart'][$key]); 
+	unset($_SESSION['prodId']);
+		  $status = "<div class='box' style='color:red;'>
+		  Product is removed from your cart!</div>";
+		  }
+	   
+		}
+		
+		}
+	}else if(isset($_SESSION['prodId'])){ echo 55;
+		echo "session is not set"; 
+		unset($_SESSION['id']); session_unset(); 
+	}
+
+	} 
+
+
+//CheckOut Functionality
+if(isset($_SESSION['prodId'])){ 
+	$sql = mysqli_query($conn, "SELECT * FROM products WHERE id='$_SESSION[prodId]'"); 
+			while($cartRows = mysqli_fetch_assoc($sql)){
+        if(isset($_SESSION['cart'])){ 
+			$items = array_column($_SESSION['cart'],'short_description'); 
+			$prod = $cartRows['short_description']; 
+			if(in_array($prod, $items)){			}
+			else{ 
+				$count = count($_SESSION['cart']); 
+				$_SESSION["cartItems"]=$count+1; 
+				$_SESSION['cart'][$count] = $cartRows; 
+				echo "<script>
+				alert('Item added to cart'); 
+				</script>"; 
+			}
+		}
+		else{ 
+			$_SESSION["cartItems"] = 1;
+			$_SESSION['cart']['0'] = $cartRows;
+			echo "<script>
+			alert('Item added to cart'); exit;
+			</script>"; 
+		}
+		}
+	}
+?>
 	<section id="cart_items">
 		<div class="container">
 			<div class="breadcrumbs">
@@ -109,123 +168,98 @@ include 'header.php'; ?>
 			<div class="review-payment">
 				<h2>Review & Payment</h2>
 			</div>
+			<form action="" method="post">               
+			<?php
+if(isset($_SESSION['cart'])){
+    $total_price = 0;
+?>	
+<button type="submit" name="deleteAll" class="btn btn-danger" style="margin-left:87%;">Delete all cart Items</button>
+<table class="table table-bordered table-striped text-center">
+<thead style="background-color:orange; color:black;">
+<tr>
+<th>No.</th>
+<th>Product</th>
+<th>Description</th>
+<th>Price</th>
+<th>Quantity</th>
+<th>Total Price</th>
+<tr>
+</thead>
+<?php		
+ foreach($_SESSION['cart'] as $product){
 
-			<div class="table-responsive cart_info">
-				<table class="table table-condensed">
-					<thead>
-						<tr class="cart_menu">
-							<td class="image">Item</td>
-							<td class="description"></td>
-							<td class="price">Price</td>
-							<td class="quantity">Quantity</td>
-							<td class="total">Total</td>
-							<td></td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="images/cart/one.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
+?>
+  <tbody style="background-color: white; color:black;"> 
+ <tr>
+<td align="left"><?php echo ++$n;?>.</td>
+<td>
+<img data-enlargeable style="cursor: zoom-in" src='images/Uploads/<?php echo $product["image"]; ?>' width="75" height="80" />
+</td>
+<td align="left" ><?php echo $product["short_description"]; ?><br />
+</td>
+<td align="left" ><?php echo "$".$product["mrp"]; ?></td>
+<td>
+<form method='post' action=''>
+<select name='quantity' class='quantity' onChange="this.form.submit()">
+<option <?php if($product["quantity"]==1) echo "selected";?>
+value="1">1</option>
+<option <?php if($product["quantity"]==2) echo "selected";?>
+value="2">2</option>
+<option <?php if($product["quantity"]==3) echo "selected";?>
+value="3">3</option>
+<option <?php if($product["quantity"]==4) echo "selected";?>
+value="4">4</option>
+<option <?php if($product["quantity"]==5) echo "selected";?>
+value="5">5</option>
+</select>
+</form>
+<td colspan="6"  align="right-center"><?php echo "$".$product["mrp"]*$product["quantity"]; ?></td>
+</tr>
+<?php
+$mrp += ($product["mrp"]*$product["quantity"]);
+}
+?> 
 
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="images/cart/two.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
-						<tr>
-							<td class="cart_product">
-								<a href=""><img src="images/cart/three.png" alt=""></a>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Colorblock Scuba</a></h4>
-								<p>Web ID: 1089772</p>
-							</td>
-							<td class="cart_price">
-								<p>$59</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">$59</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="4">&nbsp;</td>
-							<td colspan="2">
-								<table class="table table-condensed total-result">
-									<tr>
-										<td>Cart Sub Total</td>
-										<td>$59</td>
+<br>
+<tr>
+										<td colspan="5" align="center">Cart Sub Total</td>
+										<td>$</td>
 									</tr>
 									<tr>
-										<td>Exo Tax</td>
-										<td>$2</td>
+										<td colspan="5" align="center">Exo Tax</td>
+										<td>$</td>
 									</tr>
-									<tr class="shipping-cost">
-										<td>Shipping Cost</td>
+								
+										<td colspan="5" align="center">Shipping Cost</td>
 										<td>Free</td>										
 									</tr>
 									<tr>
-										<td>Total</td>
-										<td><span>$61</span></td>
+										<td style=color:orange colspan="5" align="center">Grand Total</td>
+										<td style=color:orange><span>$</span></td>
 									</tr>
-								</table>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="payment-options">
+									</tr>
+</td>
+</tbody>
+</table>
+</form>
+<form action="" method="post">               
+	<!-- <button type="submit" name="deleteAll" class="btn btn-danger" style="margin-left:20%;">Delete all cart Items</button> -->
+<button class="btn btn-warning" style="margin-left:85%;">Place Order <i class="fa fa-shopping-cart"></i></button>
+</tr>
+<?php
+}else{ 
+	// echo "<pre>"; print_r($_SESSION('cart')); echo "</pre>";
+//  echo "<h2> Your cart is empty!</h2>";
+echo "<h1 align=center style=color:orange> Checkout Is Empty </h1> ";
+echo "<p align=center style=color:red> Add Items to Cart </p><br> ";
+ }
+?>
+</div>
+</div>
+</br>
+<br>
+		
+			<!-- <div class="payment-options">
 					<span>
 						<label><input type="checkbox"> Direct Bank Transfer</label>
 					</span>
@@ -237,6 +271,7 @@ include 'header.php'; ?>
 					</span>
 				</div>
 		</div>
-	</section> <!--/#cart_items-->
+		</div>
+	</section> /#cart_items -->
 
 <?php include 'footer.php'; ?>

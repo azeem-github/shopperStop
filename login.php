@@ -1,5 +1,5 @@
 <?php 
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 define('title', 'Forms | E-Shopper');
 include 'header.php'; 
 ?>

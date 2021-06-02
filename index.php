@@ -1,8 +1,9 @@
 <?php 
 if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
+
 require "config/config.php";
-$title = "Home | E-Shopper";
 include "header.php";
+define('title', 'Cart | E-Shopper');
 
 //
 $limit = 3;
