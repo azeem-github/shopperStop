@@ -1,6 +1,5 @@
 <?php
 if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
-
 require 'config/config.php';
 include 'header.php';
 define('title', 'Cart | E-Shopper');
@@ -35,6 +34,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
    
 	}
 
+	//Empty Cart
 if(isset($_POST['deleteAll'])){ 
 	if(isset($_SESSION['cart'])){ 
 	session_unset(); 
@@ -47,25 +47,20 @@ if(isset($_POST['deleteAll'])){
 		if(isset($_SESSION['cart'])) { 
 			foreach($_SESSION['cart'] as $key => $product) { 
 			if($product['id'] == $_POST['hId']){ 
-	 unset($_SESSION['cart'][$key]); //echo "4.1";
+	 unset($_SESSION['cart'][$key]); 
 	unset($_SESSION['prodId']);
-		  $status = "<div class='box' style='color:red;'>
-		  Product is removed from your cart!</div>";
+	echo "<script>alert('Item Removed !');</script>";
 		  }
 	   
 		}
 		
 		}
-	}else if(isset($_SESSION['prodId'])){ echo 55;
-		echo "session is not set"; 
-		unset($_SESSION['id']); session_unset(); 
+	}else if(isset($_SESSION['cart'])){ echo 55;
+	 		unset($_SESSION['prodId']);
+		session_unset();
+			 echo "session is not set";
 	}
-
 	} 
-
-
-
-
 // Add to cart Funtionality
 if(isset($_SESSION['prodId'])){ 
 	$sql = mysqli_query($conn, "SELECT * FROM products WHERE id='$_SESSION[prodId]'"); 
@@ -87,7 +82,7 @@ if(isset($_SESSION['prodId'])){
 			$_SESSION["cartItems"] = 1;
 			$_SESSION['cart']['0'] = $cartRows;
 			echo "<script>
-			alert('Item added to cart'); exit;
+			alert('Item added to cart'); exit;       
 			</script>"; 
 		}
 		}
@@ -162,7 +157,7 @@ value="5">5</option>
 <form method='post' action=''>
 <input type='hidden' name="hId" value="<?php echo $product['id']; ?>" />
 <button type='submit' name="delete" class="btn-sm btn-warning">Remove</button>
- <input type='hidden' name="prodId" value="<?php echo $product['id']; ?>" />
+ <!-- <input type='hidden' name="prodId" value="<?php //echo $product['id']; ?>" /> -->
 <!-- <input type='hidden' name='action' value="change" /> -->
 <!-- <button type='submit' class="btn-sm btn-warning">Update</button>  -->
 </td>
@@ -171,14 +166,14 @@ value="5">5</option>
             <span class="glyphicon"aria-hidden="true"></span>Remove</a> -->
 
 
- <td colspan="6"  align="right-center"><?php echo "$".$product["mrp"]*$product["quantity"]; ?></td>
+ <td colspan="6"  align="right-center"><?php echo "$".$products["mrp"]*$product["quantity"]; ?></td>
 </tr>
 <?php
 $mrp += ($product["mrp"]*$product["quantity"]);
 }
 ?> 
 <tr>
-<td colspan="8" align="right">
+<td colspan="9" align="right">
 <strong> GRAND TOTAL: <?php echo "$".$mrp; ?></strong>
 </td>
 </tbody>
@@ -188,13 +183,8 @@ $mrp += ($product["mrp"]*$product["quantity"]);
 <hr>
 <br> 
 	<form action="" method="post" enctype="multipart/form-data">
-	<button type="submit" name="deleteAll" class="btn btn-danger" style="margin-left:20%;">Delete all cart Items</button>
-										<img data-enlargeable style="cursor: zoom-in" src="images/shop/<?php echo $row1['image']; ?>" alt="" />
-										<h2> <?php echo $row1['mrp']; ?></h2>
-											<p><?php echo $row1['short_description']; ?></p>
-											<input type="hidden" name="id" value="<?php echo $row1['id']; ?>">
-										<button type="submit" name="checkOut" class="btn btn-info" style="margin-left:20%;"><i style="font-size:20px" class="fa">&#xf09d;</i> CheckOut</button>
-									</form>
+	<button type="submit" name="deleteAll" class="btn btn-danger" style="full-width">Delete all cart Items</button>
+	</form>
   <?php
 }else{ 
 	// echo "<pre>"; print_r($_SESSION('cart')); echo "</pre>";
@@ -214,7 +204,7 @@ echo "<h1 align=center style=color:orange>Your Cart Is Empty </h1> <br> ";
 				<hr>		
 	</section> </#cart_items-->
 
-	 <!-- <section id="do_action">
+	 <section id="do_action">
 		<div class="container">
 			<div class="heading">
 				<h3>What would you like to do next?</h3>
@@ -283,14 +273,21 @@ echo "<h1 align=center style=color:orange>Your Cart Is Empty </h1> <br> ";
 							<li>Shipping Cost <span>Free</span></li>
 							<li>Total <span>$61</span></li>
 						</ul>
+						<form action="" method="post" enctype="multipart/form-data">
 							<a class="btn btn-default update" href="">Update</a>
-							<a class="btn btn-default check_out" href="">Check Out</a>
+							<button type="submit" name="checkOut" class="btn btn-default check_out"> CheckOut</button>
+							<img data-enlargeable style="cursor: zoom-in" src="images/shop/<?php echo $row1['image']; ?>" alt="" />
+										<h2> <?php echo $row1['mrp']; ?></h2>
+											<p><?php echo $row1['short_description']; ?></p>
+											<input type="hidden" name="id" value="<?php echo $row1['id']; ?>">
+										<!-- <button type="submit" name="checkOut" class="btn btn-warning"> CheckOut</button>
+									</form> -->
+							<!-- <a class="btn btn-default check_out"href="">Check Out</a> -->
 					</div>
 				</div>
 			</div>
 		</div>
 	</section> 
- -->
 
 <!-- <script>
 // update quantity button listener
@@ -339,20 +336,3 @@ $('.update-quantity-form').on('submit', function(){
 	});
 	</script>
 	
-
-
-<!-- <td>
-					<div class="quantity buttons_added">
-					<form action="" method="post">
-						<input type="submit" class="minus" name="minus" value="-">				
-						<input type="text" size="4" class="input-text qty text" title="Qty" value="<?php //echo $qua;?>" name="" max="29" min="0" step="1" >
-						<input type="submit" class="plus" name="plus" value="+">
-					</form>					
-					</div>
-				</td>
-				<td>
-					<span class="amount">$ <?php //echo number_format($row['mrp'] * $qua); ?></span>
-				</td>
-				<td>
-					<a class="remove remove_cart" href="#" dataid="<?php //echo $row['prodId']; ?>">×</a>
-				</td> -->

@@ -219,47 +219,44 @@ value="5">5</option>
 $mrp += ($product["mrp"]*$product["quantity"]);
 }
 ?> 
-
-<br>
-<tr>
-										<td colspan="5" align="center">Cart Sub Total</td>
-										<td>$</td>
+							<td colspan="4">&nbsp;</td>
+							<td colspan="2">
+								<table class="table table-condensed total-result">
+									<tr>
+										<td>Cart Sub Total</td>
+										<td>$59</td>
 									</tr>
 									<tr>
-										<td colspan="5" align="center">Exo Tax</td>
-										<td>$</td>
+										<td>Exo Tax</td>
+										<td>$2</td>
 									</tr>
-								
-										<td colspan="5" align="center">Shipping Cost</td>
+									<tr class="shipping-cost">
+										<td>Shipping Cost</td>
 										<td>Free</td>										
 									</tr>
 									<tr>
-										<td style=color:orange colspan="5" align="center">Grand Total</td>
-										<td style=color:orange><span>$</span></td>
+										<td>Total</td>
+										<td style=color:orange><span>$61</span></td>
 									</tr>
-									</tr>
-</td>
+								</table>
+							</td>
+						
 </tbody>
 </table>
 </form>
 <form action="" method="post">               
 	<!-- <button type="submit" name="deleteAll" class="btn btn-danger" style="margin-left:20%;">Delete all cart Items</button> -->
-<button class="btn btn-warning" style="margin-left:85%;">Place Order <i class="fa fa-shopping-cart"></i></button>
+<button class="btn btn-warning" style="margin-left:90%;">Place Order <i class="fa fa-shopping-cart"></i></button>
 </tr>
 <?php
 }else{ 
 	// echo "<pre>"; print_r($_SESSION('cart')); echo "</pre>";
 //  echo "<h2> Your cart is empty!</h2>";
-echo "<h1 align=center style=color:orange> Checkout Is Empty </h1> ";
-echo "<p align=center style=color:red> Add Items to Cart </p><br> ";
+echo "<h1 align=center style=color:orange> EMPTY  </h1> ";
+echo "<p align=center style=color:red> Add Items to Cart For Checkout</p><br> ";
  }
-?>
-</div>
-</div>
-</br>
-<br>
-		
-			<!-- <div class="payment-options">
+?>	
+		<div class="payment-options">
 					<span>
 						<label><input type="checkbox"> Direct Bank Transfer</label>
 					</span>
@@ -272,6 +269,6 @@ echo "<p align=center style=color:red> Add Items to Cart </p><br> ";
 				</div>
 		</div>
 		</div>
-	</section> /#cart_items -->
+	</section> 
 
 <?php include 'footer.php'; ?>

@@ -91,50 +91,8 @@
 								<li><a href=""><i class="fa fa-user"></i> Account</a></li>
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.php"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart.php"><i class="fa fa-shopping-cart"><?php									
-if(!empty($_SESSION['cart'])){
-	$c_count =count($_SESSION['cart']);
-}else{echo "Cart(0)";}
-?></i> </a></li>
-<!-- <?php									
-// if(!empty($_SESSION['cart'])){
-// 	$c_count =count($_SESSION['cart']);
-// }else{echo "Cart(0)";}
-?> -->
+								<li><a href="cart.php"><i class="fa fa-shopping-cart"></i>Cart</a></li>							
 
-<!--</a></li>
-<?php
-// if(!empty($_SESSION["cart"])) {
-// $cart_count = count($_SESSION["cart"]);
-?>
-<div class="cart_div">
-<a href="cart.php"><i class="fa fa-sh"></i> Cart<span>
-<?php // echo $cart_count; ?></span></a>
-</div>
-<?php
-// }else { echo "(0)"; }
- ?>
-<?php
-$result = mysqli_query($con,"SELECT * FROM products");
-while($row = mysqli_fetch_assoc($result)){
-    echo "<div class='product_wrapper'>
-    <form method='post' action=''>
-    <input type='hidden' name='id' value=".$row['id']." />
-    <div class='image'><img src='".$row['image']."' /></div>
-    <div class='short_description'>".$row['short_description']."</div>
-    <div class='mrp'>$".$row['mrp']."</div>
-    <button type='submit' class='buy'>Buy Now</button>
-    </form>
-    </div>";
-        }
-mysqli_close($con);
-?>
- 
-<div style="clear:both;"></div>
- 
-<div class="message_box" style="margin:10px 0px;">
-<?php echo $status; ?>
-</div> -->
 <li><a href="login.php"><i class="fa fa-lock"></i> Login</a></li>
 							</ul>
 						</div>
