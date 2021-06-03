@@ -1,13 +1,39 @@
 <?php
-require 'config/config.php';	
-//  $rows2 = mysqli_fetch_array($query2);
-   //while($rows2 = mysqli_fetch_array($query2));
-// } else {
-	// $query2 = mysqli_query($conn, "SELECT short_description, mrp, image FROM products");
-// }
+if(session_status()!== PHP_SESSION_ACTIVE){
+	session_start();  }
 
+require 'config/config.php';	
 define('title', 'Categories| E-Shopper');
-include 'header.php'; ?>
+include 'header.php'; 
+
+//Add Item To Cart
+if(isset($_POST['addCart'])){
+	$_SESSION['prodId'] = $_POST['id'];
+	echo "<script>window.location.href='cart.php';</script>";
+
+}
+
+if(isset($_POST['prodId']) && $_POST['prodId']!=""){
+	$prodId = $_POST['prodId'];
+	$result = mysqli_query(
+		$conn, "SELECT * FROM products WHERE id='$prodId'"
+	);
+	$row = mysqli_fetch_assoc($result);
+	$image = $row['image'];
+	$short_description = $row['short_description'];
+	$mrp = $row['mrp'];
+
+
+	$caartArray = array(
+		$prodId=>array(
+			'image'=>$image,
+			'short_description'=>$short_description,
+			'mrp'=>$mrp,
+			'quantity'=>1)
+		);
+	
+}
+?>
 
 <form action="" method="POST">
 	<section id="advertisement">
@@ -79,13 +105,14 @@ include 'header.php'; ?>
 								<div class="single-products">
                                
 									<div class="productinfo text-center">
-										<img src="images/shop/<?php echo $row['image']; ?>" alt="" />
+									<form action="" method="post" enctype="multipart/form-data">
+										<img data-enlargeable style="cursor: zoom-in" src="images/shop/<?php echo $row['image']; ?>" alt="" />
 										<h2>$ <?php echo $row['mrp']; ?></h2>
 											<p><?php echo $row['short_description']; ?></p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+											<input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+										<button type="submit" name="addCart" class="btn btn-warning" style="width:100%;"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+									</form>
 									</div>
-
-									
 								</div>
 								<div class="choose">
 									<ul class="nav nav-pills nav-justified">

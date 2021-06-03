@@ -117,7 +117,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 							  $query = mysqli_query($conn, "SELECT * FROM categories");
 							  
 							  while($rows = mysqli_fetch_array($query)){
-							  //   echo "<pre>"; print_r($rows); echo "</pre>"; 
+							  
 								  $count = mysqli_query($conn, "SELECT id FROM products WHERE products.category = $rows[id]");
 								  $prodCount = mysqli_num_rows($count);
 								  ?>
@@ -213,8 +213,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 									</ul>
 								</div>
 							</div>
-						</div>
-					
+						</div>					
 						<?php  } 
 						$paginaton = mysqli_query($conn, "SELECT * FROM products");
 						$count = mysqli_num_rows($paginaton);
