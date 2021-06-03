@@ -49,16 +49,16 @@ if(isset($_POST['deleteAll'])){
 			if($product['id'] == $_POST['hId']){ 
 	 unset($_SESSION['cart'][$key]); 
 	unset($_SESSION['prodId']);
-	echo "<script>alert('Item Removed !');</script>";
+		$status = "<div class='box' style='color:red;'>
+		Product is removed from your cart!</div>";
 		  }
 	   
 		}
 		
 		}
-	}else if(isset($_SESSION['cart'])){ echo 55;
+	}else if(isset($_SESSION['cart'])){ 
 	 		unset($_SESSION['prodId']);
 		session_unset();
-			 echo "session is not set";
 	}
 	} 
 // Add to cart Funtionality
