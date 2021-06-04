@@ -55,20 +55,40 @@ if(isset($_POST['deleteAll'])){
 	   
 		}
 		
-		}
-	}else if(isset($_SESSION['cart'])){ 
+		
+	}elseif(isset($_SESSION['prodId'])){ 
+		echo "<script> alert('Session is not set'); </script>"; 
 	 		unset($_SESSION['prodId']);
 		session_unset();
 	}
 	} 
-// Add to cart Funtionality
+}
+
+//UPDATE THE TOTAL WITH INCREAS IN QUANTITY
+if(isset($_POST['update'])){
+	if($_POST['hId'] != ''){
+		if(isset($_SESSION['cart'])){
+			foreach($_SESSION['cart'] as $key => $value)
+			{
+				if($value['id'] == $_POST['hId']){
+					$_SESSION['cart'][$key]['qty'] = $_POST['qty'];
+					($_SESSION['cart']);
+				}
+			}
+		}
+	}
+}
+
+// ADD TO CART FUNCTIONALITY
 if(isset($_SESSION['prodId'])){ 
 	$sql = mysqli_query($conn, "SELECT * FROM products WHERE id='$_SESSION[prodId]'"); 
 			while($cartRows = mysqli_fetch_assoc($sql)){
         if(isset($_SESSION['cart'])){ 
 			$items = array_column($_SESSION['cart'],'short_description'); 
 			$prod = $cartRows['short_description']; 
-			if(in_array($prod, $items)){			}
+			if(in_array($prod, $items)){	
+				echo "<script>alert('Item already added');</script>";
+					}
 			else{ 
 				$count = count($_SESSION['cart']); 
 				$_SESSION["cartItems"]=$count+1; 
@@ -90,119 +110,85 @@ if(isset($_SESSION['prodId'])){
 
 ?>
 
-	<section id="cart_items">
+<section id="cart_items">
 		<div class="container">
 			<div class="breadcrumbs">
-				<ol class="breadcrumb">
-				  <li><a href="index.php">Home</a></li>
-				  <li class="active">Shopping Cart</li>
+				<ol>
+				<li class="cart_delete">
+							<form action="" method="POST">
+							<input type="hidden" name="prodId" value="<?php echo $product['id']; ?>">
+								<button name="deleteAll" class="cart_quantity_delete btn-warning" href=""><i class="fa fa-times"></i> Delete</button>
+								</form>
+							</li>
 				</ol>
 			</div>
-			<div class="table-responsive">
-			<div class="">
-			
-<?php
+			<div class="table-responsive cart_info">
+			<?php
 if(isset($_SESSION['cart'])){
-    $total_price = 0;
+    //$total_cart = 0;
+
 ?>	
-<table class="table table-bordered table-striped text-center">
-<thead style="background-color:orange; color:black;">
-<tr>
-<th>No.</th>
-<th>Product</th>
-<th>Description</th>
-<th>Price</th>
-<th>Quantity</th>
- <th >Action</th> 
-<th>Total Price</th>
-<tr>
-</thead>
-<?php		
- foreach($_SESSION['cart'] as $product){
 
-?>
-  <tbody style="background-color: white; color:black;"> 
- <tr>
-<td align="left"><?php echo ++$n;?>.</td>
-<td>
-<img data-enlargeable style="cursor: zoom-in" src='images/Uploads/<?php echo $product["image"]; ?>' width="75" height="80" />
-</td>
-<td align="left" ><?php echo $product["short_description"]; ?><br />
-</td>
-<td align="left" ><?php echo "$".$product["mrp"]; ?></td>
+<table class="table table-condensed">
+	<thead
+	style="background-color:orange; color:black;">
+	<th class="id"> S.no</th>
+			<th class="image">Item</th>
+			<th class="description">Description</th>
+			<th class="price">Price</th>
+			<th class="quantity">Quantity</th>
+			<th class="total">Total</th>
+			<td></td>
+					
+	</thead>
+		<?php
+		$n=1.;
+		 foreach($_SESSION['cart'] as $product){
+			 //$total_cart = $total_cart + $product['mrp'];
+			 $product['qty'] = 1;
 
-<!-- <td>
-<form method='post' action=''>
-<input type="submit" class="minus" name="minus" value="-">
-<input type="text" size="4" class="input-text qty text" title="Qty" value="<?php //echo $product['quantity'];?>" name="" max="29" min="0" step="1" >
-<input type="submit" class="plus" name="plus" value="+">
-</form> -->
-
-<td>
-<form method='post' action=''>
-<select name='quantity' class='quantity' onChange="this.form.submit()">
-<option <?php if($product["quantity"]==1) echo "selected";?>
-value="1">1</option>
-<option <?php if($product["quantity"]==2) echo "selected";?>
-value="2">2</option>
-<option <?php if($product["quantity"]==3) echo "selected";?>
-value="3">3</option>
-<option <?php if($product["quantity"]==4) echo "selected";?>
-value="4">4</option>
-<option <?php if($product["quantity"]==5) echo "selected";?>
-value="5">5</option>
-</select>
-</form>
-<td align="center" >
-<form method='post' action=''>
-<input type='hidden' name="hId" value="<?php echo $product['id']; ?>" />
-<button type='submit' name="delete" class="btn-sm btn-warning">Remove</button>
- <!-- <input type='hidden' name="prodId" value="<?php //echo $product['id']; ?>" /> -->
-<!-- <input type='hidden' name='action' value="change" /> -->
-<!-- <button type='submit' class="btn-sm btn-warning">Update</button>  -->
-</td>
-</form>
-<!-- <a href="cart.php?action=delete&prodId=<?php //echo $product['prodId']; ?>"class="btn btn-danger btn-sm a-btn-slide-text" name="action">
-            <span class="glyphicon"aria-hidden="true"></span>Remove</a> -->
-
-
- <td colspan="6"  align="right-center"><?php echo "$".$products["mrp"]*$product["quantity"]; ?></td>
-</tr>
-<?php
-$mrp += ($product["mrp"]*$product["quantity"]);
-}
-?> 
-<tr>
-<td colspan="9" align="right">
-<strong> GRAND TOTAL: <?php echo "$".$mrp; ?></strong>
-</td>
-</tbody>
-</table>
-</form>
-</div>
-<hr>
-<br> 
-	<form action="" method="post" enctype="multipart/form-data">
-	<button type="submit" name="deleteAll" class="btn btn-danger" style="full-width">Delete all cart Items</button>
-	</form>
-  <?php
-}else{ 
-	// echo "<pre>"; print_r($_SESSION('cart')); echo "</pre>";
-//  echo "<h2> Your cart is empty!</h2>";
-echo "<h1 align=center style=color:orange>Your Cart Is Empty </h1> <br> ";
- }
-?>
-</div>
-<div style="clear:both;"></div>
-
-<div class="message_box" style="margin:10px 0px;">
-<?php echo $status; ?>
-</div>
-
-
-				<br>
-				<hr>		
-	</section> </#cart_items-->
+			// echo "<pre>";
+			 //print_r($product);
+        ?>
+	<tbody
+	style="background-color: white; color:black;">
+		<tr>
+		<td><?php echo $n; ?> . </td>
+			<td class="cart_product">
+				<img src="images/Uploads/<?php echo $product['image']; ?>" alt="">
+			</td>
+			<td class="cart_description">
+				<?php echo $product['short_description']; ?></p>
+			</td>
+			<td class="cart_price">
+				<p>$<?php echo $product['mrp'];?></p>
+					<input type="hidden" class="iprice" value="<?php echo $product['mrp']; ?>">
+			</td>
+			<td class="cart_quantity">
+					<form action="" method="POST">
+					<input class="cart_quantity_input iquantity" onchange="subTotal()" type="number" name="quantity" value="<?php echo $product['qty']; ?>" min="1" max="100">
+				<div class="cart_quantity_delete btn-success">
+      </div>
+				</div>
+			</td>
+			<td class="cart_total itotal">
+			</td>
+			<td class="cart_delete">
+				<form action="" method="POST">
+				<input type="hidden" name="hId" value="<?php echo $product['id']; ?>">
+				<button type="submit" name="delete" class="cart_quantity_delete btn-danger"><i class="fa fa-times"></i> Delete</button>
+				</form>
+			</td>
+			</tr>
+			<?php } ?>
+			</tbody></table>
+				<?php
+			}else{ 
+				echo "<h1 align=center style=color:orange>Your Cart Is Empty </h1> <br> ";
+ } ?>
+			</div>
+		</div>
+	</section> <!--/#cart_items-->
 
 	 <section id="do_action">
 		<div class="container">
@@ -254,6 +240,19 @@ echo "<h1 align=center style=color:orange>Your Cart Is Empty </h1> <br> ";
 									<option>Canada</option>
 									<option>Dubai</option>
 								</select>
+								</li>
+							<li class="single_field">
+								<label>Region / State:</label>
+								<select>
+									<option>Select</option>
+									<option>Dhaka</option>
+									<option>London</option>
+									<option>Dillih</option>
+									<option>Lahore</option>
+									<option>Alaska</option>
+									<option>Canada</option>
+									<option>Dubai</option>
+								</select>
 							
 							</li>
 							<li class="single_field zip-field">
@@ -280,28 +279,12 @@ echo "<h1 align=center style=color:orange>Your Cart Is Empty </h1> <br> ";
 										<h2> <?php echo $row1['mrp']; ?></h2>
 											<p><?php echo $row1['short_description']; ?></p>
 											<input type="hidden" name="id" value="<?php echo $row1['id']; ?>">
-										<!-- <button type="submit" name="checkOut" class="btn btn-warning"> CheckOut</button>
-									</form> -->
-							<!-- <a class="btn btn-default check_out"href="">Check Out</a> -->
 					</div>
 				</div>
 			</div>
 		</div>
 	</section> 
 
-<!-- <script>
-// update quantity button listener
-$('.update-quantity-form').on('submit', function(){
- 
-    // get basic information for updating the cart
-    var id = $(this).find('.product-id').text();
-    var quantity = $(this).find('.cart-quantity').val();
- 
-    // redirect to update_quantity.php, with parameter values to process the request
-    window.location.href = "update_quantity.php?id=" + id + "&quantity=" + quantity;
-    return false;
-});
-</script> -->
 <?php include 'footer.php'; ?>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -336,3 +319,22 @@ $('.update-quantity-form').on('submit', function(){
 	});
 	</script>
 	
+	<script>
+	var iprice=document.getElementsByClassName('iprice');
+	var iquantity=document.getElementsByClassName('iquantity');
+	var itotal=document.getElementsByClassName('itotal');
+	var ctotal=document.getElementsById('cTotal');
+	var ct=0; //cart total
+
+	function subTotal(){
+		ct=0;
+		for(i = 0; i < iprice.length; i++) {
+			itotal[i].innerText = (iprice[i].value)*
+			(iquantity[i].value);
+			ct = ct +(iprice[i].value)*(iquantity[i].
+			value);
+		}
+		cTotal.innerText = ct;
+	}
+	subTotal();
+	</script>
