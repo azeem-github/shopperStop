@@ -112,24 +112,21 @@ if(isset($_SESSION['prodId'])){
 
 <section id="cart_items">
 		<div class="container">
-			<div class="breadcrumbs">
-				<ol>
-				<li class="cart_delete">
-							<form action="" method="POST">
-							<input type="hidden" name="prodId" value="<?php echo $product['id']; ?>">
-								<button name="deleteAll" class="cart_quantity_delete btn-warning" href=""><i class="fa fa-times"></i> Delete</button>
-								</form>
-							</li>
+		<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="index.php">Home</a></li>
+				  <li class="active">Shopping Cart</li>
 				</ol>
 			</div>
-			<div class="table-responsive cart_info">
+			<div class="table-responsive">
+			<div class="">
+		
+	
 			<?php
 if(isset($_SESSION['cart'])){
     //$total_cart = 0;
-
 ?>	
-
-<table class="table table-condensed">
+<table class="table table-bordered table-striped text-center">
 	<thead
 	style="background-color:orange; color:black;">
 	<th class="id"> S.no</th>
@@ -155,7 +152,7 @@ if(isset($_SESSION['cart'])){
 		<tr>
 		<td><?php echo $n; ?> . </td>
 			<td class="cart_product">
-				<img src="images/Uploads/<?php echo $product['image']; ?>" alt="">
+				<img src="images/Uploads/<?php echo $product['image']; ?>" width="100" height="100" alt="">
 			</td>
 			<td class="cart_description">
 				<?php echo $product['short_description']; ?></p>
@@ -170,18 +167,29 @@ if(isset($_SESSION['cart'])){
 				<div class="cart_quantity_delete btn-success">
       </div>
 				</div>
+				<td class="cart_total itotal">
 			</td>
-			<td class="cart_total itotal">
-			</td>
-			<td class="cart_delete">
+			<td>
 				<form action="" method="POST">
 				<input type="hidden" name="hId" value="<?php echo $product['id']; ?>">
-				<button type="submit" name="delete" class="cart_quantity_delete btn-danger"><i class="fa fa-times"></i> Delete</button>
+				<button type="submit" name="delete" class="cart_quantity_delete btn-danger">Delete</button>
 				</form>
 			</td>
 			</tr>
-			<?php } ?>
-			</tbody></table>
+			<?php 
+	$n++;
+		 }
+			?>
+			</tbody>
+			</table>
+			<ol>
+				<li class="cart_delete">
+							<form action="" method="POST">
+							<input type="hidden" name="prodId" value="<?php echo $product['id']; ?>">
+								<button name="deleteAll" class="btn btn-danger" style=style="margin-left:90%;class="cart_quantity_delete btn-danger" style="margin-left:87%;" href=""> Clear Cart</button>
+								</form>
+							</li>
+				</ol>
 				<?php
 			}else{ 
 				echo "<h1 align=center style=color:orange>Your Cart Is Empty </h1> <br> ";
