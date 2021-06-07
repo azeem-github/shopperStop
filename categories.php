@@ -161,3 +161,55 @@ if(isset($_POST['prodId']) && $_POST['prodId']!=""){
 	</section>
 </form>
 <?php include 'footer.php'; ?>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script>
+	$('img[data-enlargeable]').addClass('img-enlargeable').click(function() {
+    var src = $(this).attr('src');
+    var modal;
+  
+    function removeModal() {
+	modal.remove();
+	$('body').off('keyup.modal-close');
+    }
+    modal = $('<div>').css({
+	background: 'RGBA(0,0,0,0.7) url(' + src + ') no-repeat center',
+	backgroundSize: 'contain',
+	width: '100%',
+	height: '100%',
+	position: 'fixed',
+	zIndex: '10000',
+	top: '0',
+	left: '0',
+	cursor: 'zoom-out'
+    }).click(function() {
+	removeModal();
+    }).appendTo('body');
+    //handling ESC
+    $('body').on('keyup.modal-close', function(e) {
+	if (e.key === 'Escape') {
+	removeModal();
+	}
+    });
+	});
+	</script>
+
+<script>
+	var iprice=document.getElementsByClassName('iprice');
+	var iquantity=document.getElementsByClassName('iquantity');
+	var itotal=document.getElementsByClassName('itotal');
+	var ctotal=document.getElementsById('cTotal');
+	var ct=0; //cart total
+
+	function subTotal(){
+		ct=0;
+		for(i = 0; i < iprice.length; i++) {
+			itotal[i].innerText = (iprice[i].value)*
+			(iquantity[i].value);
+			ct = ct +(iprice[i].value)*(iquantity[i].
+			value);
+		}
+		cTotal.innerText = ct;
+	}
+	subTotal();
+	</script>

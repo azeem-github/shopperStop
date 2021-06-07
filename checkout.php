@@ -176,18 +176,17 @@ if(isset($_SESSION['cart'])){
 <button type="submit" name="deleteAll" class="btn btn-danger" style="margin-left:87%;">Delete all cart Items</button>
 <table class="table table-bordered table-striped text-center">
 <thead style="background-color:orange; color:black;">
-<tr>
-<th>No.</th>
-<th>Product</th>
-<th>Description</th>
-<th>Price</th>
-<th>Quantity</th>
-<th>Total Price</th>
-<tr>
+<th class="id"> S.no</th>
+			<th class="image">Item</th>
+			<th class="description">Description</th>
+			<th class="price">Price</th>
+			<th class="quantity">Quantity</th>
+			<th class="total">Total</th>
+			<td>Action</td>
 </thead>
 <?php		
  foreach($_SESSION['cart'] as $product){
-
+	$product['qty'] = 1;
 ?>
   <tbody style="background-color: white; color:black;"> 
  <tr>
@@ -197,28 +196,22 @@ if(isset($_SESSION['cart'])){
 </td>
 <td align="left" ><?php echo $product["short_description"]; ?><br />
 </td>
-<td align="left" ><?php echo "$".$product["mrp"]; ?></td>
-<td>
-<form method='post' action=''>
-<select name='quantity' class='quantity' onChange="this.form.submit()">
-<option <?php if($product["quantity"]==1) echo "selected";?>
-value="1">1</option>
-<option <?php if($product["quantity"]==2) echo "selected";?>
-value="2">2</option>
-<option <?php if($product["quantity"]==3) echo "selected";?>
-value="3">3</option>
-<option <?php if($product["quantity"]==4) echo "selected";?>
-value="4">4</option>
-<option <?php if($product["quantity"]==5) echo "selected";?>
-value="5">5</option>
-</select>
-</form>
-<td colspan="6"  align="right-center"><?php echo "$".$product["mrp"]*$product["quantity"]; ?></td>
-</tr>
-<?php
-$mrp += ($product["mrp"]*$product["quantity"]);
-}
-?> 
+<td class="cart_price">
+				<p>$<?php echo $product['mrp'];?></p>
+					<input type="hidden" class="iprice" value="<?php echo $product['mrp']; ?>">
+			</td>
+			<td align="center" ><?php echo $product["qty"]; ?><br />
+</td>
+	<td align="center" ><?php echo $product["mrp"]; ?><br />
+</td>
+			<td>
+				<form action="" method="POST">
+				<input type="hidden" name="hId" value="<?php echo $product['id']; ?>">
+				<button type="submit" name="delete" class="cart_quantity_delete btn-danger">Delete</button>
+				</form>
+			</td>
+			</tr>
+			<?php } ?>
 							<td colspan="4">&nbsp;</td>
 							<td colspan="2">
 								<table class="table table-condensed total-result">
@@ -248,6 +241,7 @@ $mrp += ($product["mrp"]*$product["quantity"]);
 	<!-- <button type="submit" name="deleteAll" class="btn btn-danger" style="margin-left:20%;">Delete all cart Items</button> -->
 <button class="btn btn-warning" style="margin-left:90%;">Place Order <i class="fa fa-shopping-cart"></i></button>
 </tr>
+
 <?php
 }else{ 
 	// echo "<pre>"; print_r($_SESSION('cart')); echo "</pre>";
@@ -303,4 +297,24 @@ echo "<p align=center style=color:red> Add Items to Cart For Checkout</p><br> ";
 	}
     });
 	});
+	</script>
+
+<script>
+	var iprice=document.getElementsByClassName('iprice');
+	var iquantity=document.getElementsByClassName('iquantity');
+	var itotal=document.getElementsByClassName('itotal');
+	var ctotal=document.getElementsById('cTotal');
+	var ct=0; //cart total
+
+	function subTotal(){
+		ct=0;
+		for(i = 0; i < iprice.length; i++) {
+			itotal[i].innerText = (iprice[i].value)*
+			(iquantity[i].value);
+			ct = ct +(iprice[i].value)*(iquantity[i].
+			value);
+		}
+		cTotal.innerText = ct;
+	}
+	subTotal();
 	</script>

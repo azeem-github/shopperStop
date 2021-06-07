@@ -5,7 +5,7 @@ include 'header.php';
 define('title', 'Cart | E-Shopper');
 // $status="";
 
-// CheckOut
+// CheckOut Page
 if(isset($_POST['checkOut'])){
 	$_SESSION['prodId'] = $_POST['id'];
    echo "<script>window.location.href='checkout.php';</script>";
@@ -22,7 +22,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
    $image = $row['image'];
    $short_description = $row['short_description'];
    $mrp = $row['mrp'];
-   
+	
    
    $cartArray = array(
 	   $prodId=>array(
@@ -135,7 +135,7 @@ if(isset($_SESSION['cart'])){
 			<th class="price">Price</th>
 			<th class="quantity">Quantity</th>
 			<th class="total">Total</th>
-			<td></td>
+			<td>Action</td>
 					
 	</thead>
 		<?php
@@ -167,7 +167,9 @@ if(isset($_SESSION['cart'])){
 				<div class="cart_quantity_delete btn-success">
       </div>
 				</div>
-				<td class="cart_total itotal">
+				<td class="cart_total itotal" onchange="subTotal()" type="number" name="quantity" value="<?php echo $product['qty']; ?>" />
+				<p><?php echo $product['qty']*$product['mrp'];?></p>
+				<input type="hidden" class="iprice" value="<?php echo $product['mrp']; ?>">
 			</td>
 			<td>
 				<form action="" method="POST">
@@ -281,12 +283,14 @@ if(isset($_SESSION['cart'])){
 							<li>Total <span>$61</span></li>
 						</ul>
 						<form action="" method="post" enctype="multipart/form-data">
-							<a class="btn btn-default update" href="">Update</a>
-							<button type="submit" name="checkOut" class="btn btn-default check_out"> CheckOut</button>
+							<!-- <a class="btn btn-default update" href="">Update</a> -->
+						
 							<img data-enlargeable style="cursor: zoom-in" src="images/shop/<?php echo $row1['image']; ?>" alt="" />
 										<h2> <?php echo $row1['mrp']; ?></h2>
 											<p><?php echo $row1['short_description']; ?></p>
 											<input type="hidden" name="id" value="<?php echo $row1['id']; ?>">
+											<a class="btn btn-default check_out" href="checkout.php">Update</a>
+							<button type="submit" name="checkOut" class="btn btn-default check_out"> CheckOut</button>
 					</div>
 				</div>
 			</div>
