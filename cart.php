@@ -23,6 +23,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
    $short_description = $row['short_description'];
    $mrp = $row['mrp'];
 	
+	
    
    $cartArray = array(
 	   $prodId=>array(
@@ -63,20 +64,22 @@ if(isset($_POST['deleteAll'])){
 	}
 	} 
 }
-
-//UPDATE THE TOTAL WITH INCREAS IN QUANTITY
-if(isset($_POST['update'])){
-	if($_POST['hId'] != ''){
-		if(isset($_SESSION['cart'])){
-			foreach($_SESSION['cart'] as $key => $value)
+// lait lets confrom
+//UPDATE THE TOTAL WITH INCREASE IN QUANTITY
+if(isset($_POST['update'])){ echo 0;
+	if($_POST['uId'] != ''){ echo 1;
+		if(isset($_SESSION['cart'])){ echo 2;
+			foreach($_SESSION['cart'] as $key => $product) echo 3;
 			{
-				if($value['id'] == $_POST['hId']){
-					$_SESSION['cart'][$key]['qty'] = $_POST['qty'];
+				// echo "<pre> product data::"; print_r($product); echo "</pre>";  echo " 3.1 ";
+				if($product['id'] == $_POST['uId']){ echo 4; 
+					echo "<pre>ID is: ";print_r($product['id']); echo "</pre>"; echo " 4.1 ";
+					$_SESSION['cart'][$key]['qty'] = $_POST['quantity']; echo 5;
 					($_SESSION['cart']);
+					// echo "<pre> cart data::";  print_r($_SESSION['cart']); echo "</pre>"; 
 				}
 			}
-		}
-	}
+		}	}
 }
 
 // ADD TO CART FUNCTIONALITY
@@ -135,8 +138,9 @@ if(isset($_SESSION['cart'])){
 			<th class="price">Price</th>
 			<th class="quantity">Quantity</th>
 			<th class="total">Total</th>
+			<!-- <td></td> -->
 			<td>Action</td>
-					
+
 	</thead>
 		<?php
 		$n=1.;
@@ -162,15 +166,24 @@ if(isset($_SESSION['cart'])){
 					<input type="hidden" class="iprice" value="<?php echo $product['mrp']; ?>">
 			</td>
 			<td class="cart_quantity">
-					<form action="" method="POST">
-					<input class="cart_quantity_input iquantity" onchange="subTotal()" type="number" name="quantity" value="<?php echo $product['qty']; ?>" min="1" max="100">
-				<div class="cart_quantity_delete btn-success">
+					<form method="POST">
+						<input class="cart_quantity_input iquantity" onchange="subTotal()" type="number" name="quantity" value="<?php echo $product['qty']; ?>" min="1" max="100" style="width: 50px; margin-right:0px;">
+						<input type="hidden" name="uId" value="<?php echo $product['id']; ?>">
+						<button type="submit" name="update" class="cart_quantity_delete btn-warning" style="margin-left:0px;">Update</button>
+					</form>
+				<!-- <div class="cart_quantity_delete btn-success"> -->
       </div>
 				</div>
 				<td class="cart_total itotal" onchange="subTotal()" type="number" name="quantity" value="<?php echo $product['qty']; ?>" />
 				<p><?php echo $product['qty']*$product['mrp'];?></p>
 				<input type="hidden" class="iprice" value="<?php echo $product['mrp']; ?>">
 			</td>
+			<!-- <td> -->
+				<!-- <form action="" method="POST">
+				<input type="hidden" name="uId" value="<?php echo $product['id']; ?>">
+				<button type="submit" name="update" class="cart_quantity_delete btn-danger">Update</button>
+				</form> -->
+			<!-- </td> -->
 			<td>
 				<form action="" method="POST">
 				<input type="hidden" name="hId" value="<?php echo $product['id']; ?>">
