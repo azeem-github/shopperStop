@@ -124,14 +124,15 @@ require 'config/config.php';
                                         <li><a href="shop.php">Products</a></li>
 										<li><a href="product-details.php">Product Details</a></li> 
 										<li><a href="checkout.php">Checkout</a></li> 
-<?php 
-$count=0;
-if(isset($_SESSION['prodId']))
-{
-	$count=count($_SESSION['cart']);
-}
+										<li><a href="cart.php">Cart</a></li> 
+<!-- <?php 
+//$count=0;
+//if(isset($_SESSION['prodId']))
+//{
+	//$count=count($_SESSION['cart']);
+//}
 ?>
-<a href="cart.php">Cart (<?php echo $count; ?>)</a>
+<a href="cart.php">Cart (<?php //echo $count; ?>)</a> -->
 
 										<li><a href="login.php">Login</a></li> 
                                     </ul>
