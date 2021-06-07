@@ -84,7 +84,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 						<div class="col-sm-5">
 							<div class="view-product">
 								<img src="images/product-details/1.jpg" alt="" />
-								<h3>ZOOM</h3>
+						
 							</div>
 							<div id="similar-product" class="carousel slide" data-ride="carousel">
 								
@@ -120,15 +120,11 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 						</div>
 						<div class="col-sm-7">
 							<div class="product-information"><!--/product-information-->
-								<img src="images/product-details/new.jpg" class="newarrival" alt="" />
-								<h2>Anne Klein Sleeveless Colorblock Scuba</h2>
-								<p>Web ID: 1089772</p>
-								<img src="images/product-details/rating.png" alt="" />
-								<span>
+							
 								<form action="" method="post" enctype="multipart/form-data">
-										<img src="images/shop/<?php echo $row['image']; ?>" alt="" />
+										<img src="images/product-details/<?php echo $row['image']; ?>" alt="" />
 										<h2>$ <?php echo $row['mrp']; ?></h2>
-											<p><?php echo $row['short_description']; ?></p>
+											<p><?php echo $row['short_d']; ?></p>
 											<input type="hidden" name="id" value="<?php echo $row['id']; ?>">
 									<button type="submit" name="addCart" class="btn btn-warning" style="width:100%;"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
 								</span>

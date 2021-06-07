@@ -212,7 +212,7 @@ if(isset($_SESSION['cart'])){
 			</td>
 			</tr>
 			<?php } ?>
-							<td colspan="4">&nbsp;</td>
+							<td colspan="2">&nbsp;</td>
 							<td colspan="2">
 								<table class="table table-condensed total-result">
 									<tr>

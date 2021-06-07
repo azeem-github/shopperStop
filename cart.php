@@ -64,19 +64,15 @@ if(isset($_POST['deleteAll'])){
 	}
 	} 
 }
-// lait lets confrom
 //UPDATE THE TOTAL WITH INCREASE IN QUANTITY
-if(isset($_POST['update'])){ echo 0;
-	if($_POST['uId'] != ''){ echo 1;
-		if(isset($_SESSION['cart'])){ echo 2;
-			foreach($_SESSION['cart'] as $key => $product) echo 3;
+if(isset($_POST['update'])){ 
+	if($_POST['uId'] != ''){ 
+		if(isset($_SESSION['cart'])){ 
+			foreach($_SESSION['cart'] as $key => $product) 
 			{
-				// echo "<pre> product data::"; print_r($product); echo "</pre>";  echo " 3.1 ";
-				if($product['id'] == $_POST['uId']){ echo 4; 
-					echo "<pre>ID is: ";print_r($product['id']); echo "</pre>"; echo " 4.1 ";
-					$_SESSION['cart'][$key]['qty'] = $_POST['quantity']; echo 5;
-					($_SESSION['cart']);
-					// echo "<pre> cart data::";  print_r($_SESSION['cart']); echo "</pre>"; 
+				if($product['id'] == $_POST['uId']){  
+					$_SESSION['cart'][$key]['qty'] = $_POST['quantity']; 
+					($_SESSION['cart']); 
 				}
 			}
 		}	}
@@ -126,6 +122,7 @@ if(isset($_SESSION['prodId'])){
 		
 	
 			<?php
+			   $total= 0;
 if(isset($_SESSION['cart'])){
     //$total_cart = 0;
 ?>	
@@ -145,6 +142,7 @@ if(isset($_SESSION['cart'])){
 		<?php
 		$n=1.;
 		 foreach($_SESSION['cart'] as $product){
+			 $total=$total+$product['mrp'];
 			 //$total_cart = $total_cart + $product['mrp'];
 			 $product['qty'] = 1;
 
@@ -156,7 +154,7 @@ if(isset($_SESSION['cart'])){
 		<tr>
 		<td><?php echo $n; ?> . </td>
 			<td class="cart_product">
-				<img src="images/Uploads/<?php echo $product['image']; ?>" width="100" height="100" alt="">
+				<img data-enlargeable style="cursor: zoom-in" src="images/Uploads/<?php echo $product['image']; ?>" width="100" height="100" alt="">
 			</td>
 			<td class="cart_description">
 				<?php echo $product['short_description']; ?></p>
@@ -220,7 +218,7 @@ if(isset($_SESSION['cart'])){
 				<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
 			</div>
 			<div class="row">
-				<div class="col-sm-6">
+				<div class="col-sm-8">
 					<div class="chose_area">
 						<ul class="user_option">
 							<li>
@@ -287,7 +285,7 @@ if(isset($_SESSION['cart'])){
 						<a class="btn btn-default check_out" href="">Continue</a>
 					</div>
 				</div>
-				<div class="col-sm-6">
+				<div class="col-sm-4">
 					<div class="total_area">
 						<ul>
 							<li>Cart Sub Total <span>$59</span></li>
@@ -345,21 +343,68 @@ if(isset($_SESSION['cart'])){
 	</script>
 	
 	<script>
+	var gt=0;
 	var iprice=document.getElementsByClassName('iprice');
 	var iquantity=document.getElementsByClassName('iquantity');
 	var itotal=document.getElementsByClassName('itotal');
-	var ctotal=document.getElementsById('cTotal');
+	var gtotal=document.getElementsById('gtotal');
 	var ct=0; //cart total
 
 	function subTotal(){
-		ct=0;
-		for(i = 0; i < iprice.length; i++) {
+		gt=0;
+		for(i=0;i<iprice.length;i++) {
 			itotal[i].innerText = (iprice[i].value)*
 			(iquantity[i].value);
 			ct = ct +(iprice[i].value)*(iquantity[i].
 			value);
 		}
-		cTotal.innerText = ct;
+		gtotal.innerText = gt;
 	}
 	subTotal();
 	</script>
+
+<script>
+displayCart: function() {
+    if( this.$formCart.length ) {
+        var cart = this._toJSONObject( this.storage.getItem( this.cartName ) );
+        var items = cart.items;
+        var $tableCart = this.$formCart.find( ".shopping-cart" );
+        var $tableCartBody = $tableCart.find( "tbody" );
+
+        for( var i = 0; i < items.length; ++i ) {
+            var item = items[i];
+            var product = item.product;
+            var price = this.currency + " " + item.price;
+            var qty = item.qty;
+            var html = "<tr><td class='pname'>" + product + "</td>" + "<td class='pqty'><input type='text' value='" + qty + "' class='qty'/></td>" + "<td class='pprice'>" + price + "</td></tr>";
+
+            $tableCartBody.html( $tableCartBody.html() + html );
+        }
+
+        var total = this.storage.getItem( this.total );
+        this.$subTotal[0].innerHTML = this.currency + " " + total;
+    } else if( this.$checkoutCart.length ) {
+        var checkoutCart = this._toJSONObject( this.storage.getItem( this.cartName ) );
+        var cartItems = checkoutCart.items;
+        var $cartBody = this.$checkoutCart.find( "tbody" );
+
+        for( var j = 0; j < cartItems.length; ++j ) {
+            var cartItem = cartItems[j];
+            var cartProduct = cartItem.product;
+            var cartPrice = this.currency + " " + cartItem.price;
+            var cartQty = cartItem.qty;
+            var cartHTML = "<tr><td class='pname'>" + cartProduct + "</td>" + "<td class='pqty'>" + cartQty + "</td>" + "<td class='pprice'>" + cartPrice + "</td></tr>";
+
+            $cartBody.html( $cartBody.html() + cartHTML );
+        }
+
+        var cartTotal = this.storage.getItem( this.total );
+        var cartShipping = this.storage.getItem( this.shippingRates );
+        var subTot = this._convertString( cartTotal ) + this._convertString( cartShipping );
+
+        this.$subTotal[0].innerHTML = this.currency + " " + this._convertNumber( subTot );
+        this.$shipping[0].innerHTML = this.currency + " " + cartShipping;
+
+    }
+}
+</script>
