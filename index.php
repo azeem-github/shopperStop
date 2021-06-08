@@ -167,18 +167,6 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 						<div class="col-sm-4" id="allProds">			
 							<div class="product-image-wrapper">
 								<div class="single-products">
-                               
-									<!-- <div class="productinfo text-center">
-										<form action="" method="post" enctype="multipart/form-data">
-										<img data-enlargeable style="cursor: zoom-in" src="images/shop/<?php //echo $row['image']; ?>" alt="" />
-										<h2>$ <?php //echo $row['mrp']; ?></h2>
-											<p><?php //echo $row['short_description']; ?></p>
-											<input type="hidden" name="id" value="<?php //echo $row['id']; ?>">
-										<button type="submit" name="addCart" class="btn btn-warning" style="width:100%;"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-									</form>
-									</div> -->
-
-									
 								</div>
 								<div class="choose">
 									<ul class="nav nav-pills nav-justified">
@@ -244,45 +232,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 			</div>
 		</div>
 	</section>	
-	  <?php
-if(!empty($_SESSION["addCart"])) {
-$cart_count = count(array_keys($_SESSION["addCart"]));
-?>
-<div class="cart_div">
-<a href="cart.php"><img src="cart-icon.png" /> Cart<span>
-<?php echo $cart_count; ?></span></a>
-</div>
-<?php
-}
-?> 
 
-<!-- <?php
-// if(!empty($_SESSION["cart"])) {
-// $cart_count = count(array_keys($_SESSION["cart"]));
-?>
-<div class="cart_div">
-<a href="cart.php"><img src="cart-icon.png" /> Cart<span>
-<?php //echo $cart_count; ?></span></a>
-<!-- </div>
-<?php
-// }
-?> -->
-
-<?php
-$result = mysqli_query($con,"SELECT * FROM 'products'");
-while($row = mysqli_fetch_assoc($result)){
-    echo "<div class='product_wrapper'>
-    <form method='post' action=''>
-    <input type='hidden' name='prodId' value=".$row['prodId']." />
-    <div class='image'><img src='".$row['image']."' /></div>
-    <div class='name'>".$row['short_description']."</div>
-    <div class='price'>$".$row['price']."</div>
-    <button type='submit' class='buy'>Buy Now</button>
-    </form>
-    </div>";
-        }
-mysqli_close($con);
-?>
 
 <div style="clear:both;"></div>
 
