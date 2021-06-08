@@ -13,18 +13,18 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 	$prodId = $_POST['prodId'];
 	$result = mysqli_query(
 	$conn,
-	"SELECT * FROM products WHERE id='$prodId'"
+	"SELECT * FROM product_details WHERE id='$prodId'"
 	);
 	$row = mysqli_fetch_assoc($result);
 	$image = $row['image'];
-	$short_description = $row['short_description'];
+	$short_d = $row['short_d'];
 	$mrp = $row['mrp'];
 	
 	
 	$cartArray = array(
 		$prodId=>array(
 		'image'=>$image,
-		'short_description'=>$short_description,
+		'short_d'=>$short_d,
 		'mrp'=>$mrp,
 		'quantity'=>1)
 	);
