@@ -22,6 +22,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
    $image = $row['image'];
    $short_description = $row['short_description'];
    $mrp = $row['mrp'];
+	$quantity = $row['qty'];
 	
 	
    
@@ -66,11 +67,11 @@ if(isset($_POST['deleteAll'])){
 }
 //UPDATE THE TOTAL WITH INCREASE IN QUANTITY
 if(isset($_POST['update'])){ 
-	if($_POST['uId'] != ''){ 
+	if($_POST['id'] != ''){ 
 		if(isset($_SESSION['cart'])){ 
 			foreach($_SESSION['cart'] as $key => $product) 
 			{
-				if($product['id'] == $_POST['uId']){  
+				if($product['uId'] == $_POST['id']){  
 					$_SESSION['cart'][$key]['qty'] = $_POST['quantity']; 
 					($_SESSION['cart']); 
 				}
@@ -142,7 +143,7 @@ if(isset($_SESSION['cart'])){
 		<?php
 		$n=1.;
 		 foreach($_SESSION['cart'] as $product){
-			 $total=$total+$product['mrp'];
+			 //$total=$total+$product['mrp'];
 			 //$total_cart = $total_cart + $product['mrp'];
 			 $product['qty'] = 1;
 
@@ -178,7 +179,7 @@ if(isset($_SESSION['cart'])){
 			</td>
 			<!-- <td> -->
 				<!-- <form action="" method="POST">
-				<input type="hidden" name="uId" value="<?php echo $product['id']; ?>">
+				<input type="hidden" name="uId" value="<?php //echo $product['id']; ?>">
 				<button type="submit" name="update" class="cart_quantity_delete btn-danger">Update</button>
 				</form> -->
 			<!-- </td> -->
