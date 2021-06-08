@@ -42,6 +42,11 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 	);
 	
 	 }
+	 if(isset($_POST['addToWishList'])){
+		$_SESSION['wishId'] = $_POST['prodId'];
+		echo "<script>window.location.href='wishlist.php';</script>";
+	}
+	
 
 	 $sql = mysqli_query($conn, "SELECT * from carousel");
 	 ?>
@@ -195,10 +200,18 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 									</div>
 								</div>
 								<div class="choose">
+								<form action="" method="post" enctype="multipart/form-data">
 									<ul class="nav nav-pills nav-justified">
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
+									<li>
+											<input type="hidden" name="prodId" value="<?php echo $prodRow['id']; ?>">
+											<button type="submit" name="addToWishList" class="btn btn-secondary" style="width:95%;"><i class="fa fa-heart"> Add to wishlist</i></button>
+											</li> 
+										
+											<li>
+											<button type="submit" name="addToComapre" class="btn btn-secondary" style="width:100%;"><i class="fa fa-plus-square"></i> compare</button>
+											</li>
 									</ul>
+									</form>
 								</div>
 							</div>
 						</div>					
