@@ -217,7 +217,7 @@ if(isset($_SESSION['cart'])){
 								<table class="table table-condensed total-result">
 									<tr>
 										<td>Cart Sub Total</td>
-										<td>$59</td>
+										<td>$120</td>
 									</tr>
 									<tr>
 										<td>Exo Tax</td>
@@ -229,7 +229,7 @@ if(isset($_SESSION['cart'])){
 									</tr>
 									<tr>
 										<td>Total</td>
-										<td style=color:orange><span>$61</span></td>
+										<td style=color:orange><span>$122</span></td>
 									</tr>
 								</table>
 							</td>
@@ -239,7 +239,7 @@ if(isset($_SESSION['cart'])){
 </form>
 <form action="" method="post">               
 	<!-- <button type="submit" name="deleteAll" class="btn btn-danger" style="margin-left:20%;">Delete all cart Items</button> -->
-<button class="btn btn-warning" style="margin-left:90%;">Place Order <i class="fa fa-shopping-cart"></i></button>
+<button class="btn btn-warning"  href="payment.php" style="margin-left:90%;">Place Order <i class="fa fa-shopping-cart"></i></button>
 </tr>
 
 <?php
