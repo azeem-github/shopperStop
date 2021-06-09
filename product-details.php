@@ -83,7 +83,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 					<div class="product-details"><!--product-details-->
 						<div class="col-sm-5">
 							<div class="view-product">
-								<img src="images/product-details/1.jpg" alt="" />
+								<img  data-enlargeable style="cursor: zoom-in" src="images/product-details/1.jpg" alt="" />
 						
 							</div>
 							<div id="similar-product" class="carousel slide" data-ride="carousel">
@@ -91,19 +91,9 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 								  <!-- Wrapper for slides -->
 								    <div class="carousel-inner">
 										<div class="item active">
-										  <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
-										  <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
-										  <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
-										</div>
-										<div class="item">
-										  <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
-										  <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
-										  <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
-										</div>
-										<div class="item">
-										  <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
-										  <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
-										  <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
+										  <a href=""><img data-enlargeable style="cursor: zoom-in" src="images/product-details/similar1.jpg" alt=""></a>
+										  <a href=""><img data-enlargeable style="cursor: zoom-in"src="images/product-details/similar2.jpg" alt=""></a>
+										  <a href=""><img data-enlargeable style="cursor: zoom-in"src="images/product-details/similar3.jpg" alt=""></a>
 										</div>
 										
 									</div>
@@ -122,8 +112,8 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 							<div class="product-information"><!--/product-information-->
 							
 								<form action="" method="post" enctype="multipart/form-data">
-										<img src="images/product-details/<?php echo $row['image']; ?>" alt="" />
-										<h2>$ <?php echo $row['mrp']; ?></h2>
+										<img  src="images/product-details/<?php echo $row['image']; ?>" alt="" />
+										<h2>$ 89<?php echo $row['mrp']; ?></h2>
 											<p><?php echo $row['short_d']; ?></p>
 											<input type="hidden" name="id" value="<?php echo $row['id']; ?>">
 									<button type="submit" name="addCart" class="btn btn-warning" style="width:100%;"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
@@ -151,7 +141,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 									<div class="product-image-wrapper">
 										<div class="single-products">
 											<div class="productinfo text-center">
-												<img src="images/home/gallery1.jpg" alt="" />
+												<img data-enlargeable style="cursor: zoom-in" src="images/home/gallery1.jpg" alt="" />
 												<h2>$56</h2>
 												<p>Easy Polo Black Edition</p>
 												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
@@ -423,3 +413,35 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 	</section>
 	
 <?php include 'footer.php'; ?>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script>
+	$('img[data-enlargeable]').addClass('img-enlargeable').click(function() {
+    var src = $(this).attr('src');
+    var modal;
+  
+    function removeModal() {
+	modal.remove();
+	$('body').off('keyup.modal-close');
+    }
+    modal = $('<div>').css({
+	background: 'RGBA(0,0,0,0.7) url(' + src + ') no-repeat center',
+	backgroundSize: 'contain',
+	width: '100%',
+	height: '100%',
+	position: 'fixed',
+	zIndex: '10000',
+	top: '0',
+	left: '0',
+	cursor: 'zoom-out'
+    }).click(function() {
+	removeModal();
+    }).appendTo('body');
+    //handling ESC
+    $('body').on('keyup.modal-close', function(e) {
+	if (e.key === 'Escape') {
+	removeModal();
+	}
+    });
+	});
+	</script>
