@@ -47,6 +47,29 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 		echo "<script>window.location.href='wishlist.php';</script>";
 	}
 	
+	if (isset($_POST['prodId']) && $_POST['prodId']!=""){
+		$prodId = $_POST['prodId'];
+		$result = mysqli_query(
+		$conn,
+		"SELECT * FROM products WHERE id='$prodId'"
+		);
+		$row = mysqli_fetch_assoc($result);
+		$image = $row['image'];
+		$short_description = $row['short_description'];
+		$mrp = $row['mrp'];
+		
+		
+		
+		
+		$cartArray = array(
+			$prodId=>array(
+			'image'=>$image,
+			'short_description'=>$short_description,
+			'mrp'=>$mrp,
+			)
+		);
+		
+		}
 
 	 $sql = mysqli_query($conn, "SELECT * from carousel");
 	 ?>
