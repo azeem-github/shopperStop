@@ -1,5 +1,5 @@
 <?php 
-session_start();
+ session_start();
 require 'config/config.php';
 ?>
 <!DOCTYPE html>
@@ -95,9 +95,14 @@ require 'config/config.php';
 								<li><a href=""><i class="fa fa-user"></i> Account</a></li>
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.php"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+								<?php$count = 0;
+								if(isset($_SESSION['cart'])){
+									$count = count($_SESSION['cart']);
+								}
+								?>
 								<li><a href="cart.php"><i class="fa fa-shopping-cart"></i>Cart</a></li>							
 
-<li><a href="login.php"><i class="fa fa-lock"></i> Login</a></li>
+<li><a href="login.php"><i class="fa fa-lock"></i> Logout</a></li>
 							</ul>
 						</div>
 					</div>
@@ -127,7 +132,7 @@ require 'config/config.php';
 										<li><a href="checkout.php">Checkout</a></li> 
 										<li><a href="cart.php">Cart</a></li>  
 
-										<li><a href="login.php">Login</a></li> 
+										<li><a href="login.php">logout</a></li> 
                                     </ul>
                                 </li> 
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
