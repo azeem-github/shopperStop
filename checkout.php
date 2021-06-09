@@ -1,10 +1,9 @@
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
-
-require 'config/config.php';
+// session_start();
+define('title', 'Checkout | E-shopper');
 include 'header.php';
-define('title', 'Cart | E-Shopper');
-
+if(isset($_SESSION['cart'])){
+}
 if(isset($_POST['deleteAll'])){ 
 	if(isset($_SESSION['cart'])){ 
 	session_unset(); 
@@ -12,88 +11,40 @@ if(isset($_POST['deleteAll'])){
 	}
 }
 
-	if(isset($_POST['delete'])){
-		if($_POST['hId'] != ''){ 		
-		if(isset($_SESSION['cart'])) { 
-			foreach($_SESSION['cart'] as $key => $product) { 
-			if($product['id'] == $_POST['hId']){ 
-	 unset($_SESSION['cart'][$key]); 
-	unset($_SESSION['prodId']);
-		  $status = "<div class='box' style='color:red;'>
-		  Product is removed from your cart!</div>";
-		  }
-	   
-		}
-		
-		}
-	}else if(isset($_SESSION['prodId'])){ echo 55;
-		echo "session is not set"; 
-		unset($_SESSION['id']); session_unset(); 
-	}
 
-	} 
-
-
-//CheckOut Functionality
-if(isset($_SESSION['prodId'])){ 
-	$sql = mysqli_query($conn, "SELECT * FROM products WHERE id='$_SESSION[prodId]'"); 
-			while($cartRows = mysqli_fetch_assoc($sql)){
-        if(isset($_SESSION['cart'])){ 
-			$items = array_column($_SESSION['cart'],'short_description'); 
-			$prod = $cartRows['short_description']; 
-			if(in_array($prod, $items)){			}
-			else{ 
-				$count = count($_SESSION['cart']); 
-				$_SESSION["cartItems"]=$count+1; 
-				$_SESSION['cart'][$count] = $cartRows; 
-				echo "<script>
-				alert('Item added to cart'); 
-				</script>"; 
+if(isset($_POST['delete'])){
+	if($_POST['id'] != ''){
+		if(isset($_SESSION['cart'])){ 
+			foreach($_SESSION['cart'] as $key => $value){
+				//print_r($key)
+				if($value['id'] == $_POST['id']){
+					unset($_SESSION['cart'][$key]);
+					unset($_SESSION['prodId']);
+					echo "<script> alert('Item has been Removed'); </script>"; 
+				}
 			}
-		}
-		else{ 
-			$_SESSION["cartItems"] = 1;
-			$_SESSION['cart']['0'] = $cartRows;
-			echo "<script>
-			alert('Item added to cart'); exit;
-			</script>"; 
-		}
+		}elseif(isset($_SESSION['prodId'])){
+			echo "<script> alert('Session is not set'); </script>"; 
+			unset($_SESSION['prodId']);
+			session_unset();
 		}
 	}
+}
+
+
 ?>
-	<section id="cart_items">
+<section id="cart_items">
 		<div class="container">
 			<div class="breadcrumbs">
 				<ol class="breadcrumb">
 				  <li><a href="#">Home</a></li>
-				  <li class="active">Check out</li>
-				</ol>
-			</div><!--/breadcrums-->
+				  <li class="active"></li>
+				  </ol>
+				  </div><!--/breadcrums-->
 
-			<div class="step-one">
-				<h2 class="heading">Step1</h2>
-			</div>
-			<div class="checkout-options">
-				<h3>New User</h3>
-				<p>Checkout options</p>
-				<ul class="nav">
-					<li>
-						<label><input type="checkbox"> Register Account</label>
-					</li>
-					<li>
-						<label><input type="checkbox"> Guest Checkout</label>
-					</li>
-					<li>
-						<a href=""><i class="fa fa-times"></i>Cancel</a>
-					</li>
-				</ul>
-			</div><!--/checkout-options-->
+				  <?php if(isset($_SESSION['cart']) && count($_SESSION['cart'])>0){ }?>
 
-			<div class="register-req">
-				<p>Please use Register And Checkout to easily get access to your order history, or use Checkout as Guest</p>
-			</div><!--/register-req-->
-
-			<div class="shopper-informations">
+				  <div class="shopper-informations">
 				<div class="row">
 					<div class="col-sm-3">
 						<div class="shopper-info">
@@ -154,7 +105,7 @@ if(isset($_SESSION['prodId'])){
 									<input type="text" placeholder="Fax">
 								</form>
 							</div>
-						</div>
+						</div>	
 					</div>
 					<div class="col-sm-4">
 						<div class="order-message">
@@ -168,89 +119,69 @@ if(isset($_SESSION['prodId'])){
 			<div class="review-payment">
 				<h2>Review & Payment</h2>
 			</div>
-			<form action="" method="post">               
-			<?php
-if(isset($_SESSION['cart'])){
-    $total_price = 0;
-?>	
-<button type="submit" name="deleteAll" class="btn btn-danger" style="margin-left:87%;">Delete all cart Items</button>
-<table class="table table-bordered table-striped text-center">
-<thead style="background-color:orange; color:black;">
-<th class="id"> S.no</th>
-			<th class="image">Item</th>
-			<th class="description">Description</th>
-			<th class="price">Price</th>
-			<th class="quantity">Quantity</th>
-			<th class="total">Total</th>
+
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+				<thead>
+				<tr class="cart_menu">
+			<td class="image">Item</td>
+			<td class="description">Description</td>
+			<td class="price">Price</td>
+			<td class="quantity">Quantity</td>
+			<td class="total">Total</td>
 			<td>Action</td>
-</thead>
-<?php		
- foreach($_SESSION['cart'] as $product){
-	$product['qty'] = 1;
-?>
-  <tbody style="background-color: white; color:black;"> 
- <tr>
-<td align="left"><?php echo ++$n;?>.</td>
-<td>
-<img data-enlargeable style="cursor: zoom-in" src='images/Uploads/<?php echo $product["image"]; ?>' width="75" height="80" />
+						</tr>
+	</thead>
+	<tbody>
+	<?php 
+	foreach($_SESSION['cart'] as $product){
+		?>
+		<tr>
+		<td class="cart_product">
+		<img data-enlargeable style="cursor: zoom-in" src="images/Uploads/<?php echo $product['image']; ?>" width="100" height="100" alt="">
+		</td>
+		<td class="cart_description">
+		
+		<?php echo $product['short_description'];?></p>
+		</td>
+		<td class="cart_price">
+		<p>$<?php echo $product['mrp'];?></p>
+		</td>
+<td class="cart_quantity">
+<div class="cart_quantity_button">
+<p class="cart_quantity_input"> <?php echo $product['qty'];?></p>
 </td>
-<td align="left" ><?php echo $product["short_description"]; ?><br />
-</td>
-<td class="cart_price">
-				<p>$<?php echo $product['mrp'];?></p>
-					<input type="hidden" class="iprice" value="<?php echo $product['mrp']; ?>">
-			</td>
-			<td align="center" ><?php echo $product["qty"]; ?><br />
-</td>
-	<td align="center" ><?php echo $product["mrp"]; ?><br />
-</td>
-			<td>
+<td class="cart_total itotal">
+<p class="cart_quantity_input"> <?php echo $product['mrp']*$product['qty'];?></p>
+			
+			<td class="cart_delete">
 				<form action="" method="POST">
-				<input type="hidden" name="hId" value="<?php echo $product['id']; ?>">
-				<button type="submit" name="delete" class="cart_quantity_delete btn-danger">Delete</button>
+				<input type="hidden" name="id" value="<?php echo $product['id']; ?>">
+				<button type="submit" name="delete" class="cart_quantity_delete btn-danger"><i class="fa fa-times"></i> Delete</button>
 				</form>
-			</td>
-			</tr>
-			<?php } ?>
-							<td colspan="2">&nbsp;</td>
-							<td colspan="2">
-								<table class="table table-condensed total-result">
-									<tr>
-										<td>Cart Sub Total</td>
-										<td>$120</td>
-									</tr>
+<?php  } ?>
+<tr>
+<td colspan="2">&nbsp;</td>
+<td colspan="2">
+<table class="table table-condensed total-result">
+
 									<tr>
 										<td>Exo Tax</td>
-										<td>$2</td>
+										<td>$0</td>
 									</tr>
 									<tr class="shipping-cost">
 										<td>Shipping Cost</td>
 										<td>Free</td>										
 									</tr>
-									<tr>
-										<td>Total</td>
-										<td style=color:orange><span>$122</span></td>
-									</tr>
+									<td>Cart Total </td>
+							<td>$130</td>
 								</table>
-							</td>
 						
-</tbody>
-</table>
-</form>
-<form action="" method="post">               
-	<!-- <button type="submit" name="deleteAll" class="btn btn-danger" style="margin-left:20%;">Delete all cart Items</button> -->
-<button class="btn btn-warning"  href="payment.php" style="margin-left:90%;">Place Order <i class="fa fa-shopping-cart"></i></button>
-</tr>
-
-<?php
-}else{ 
-	// echo "<pre>"; print_r($_SESSION('cart')); echo "</pre>";
-//  echo "<h2> Your cart is empty!</h2>";
-echo "<h1 align=center style=color:orange> EMPTY  </h1> ";
-echo "<p align=center style=color:red> Add Items to Cart For Checkout</p><br> ";
- }
-?>	
-		<div class="payment-options">
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="payment-options">
 					<span>
 						<label><input type="checkbox"> Direct Bank Transfer</label>
 					</span>
@@ -262,8 +193,7 @@ echo "<p align=center style=color:red> Add Items to Cart For Checkout</p><br> ";
 					</span>
 				</div>
 		</div>
-		</div>
-	</section> 
+	</section> <!--/#cart_items-->
 
 <?php include 'footer.php'; ?>
 
@@ -299,22 +229,24 @@ echo "<p align=center style=color:red> Add Items to Cart For Checkout</p><br> ";
 	});
 	</script>
 
+
 <script>
 	var iprice=document.getElementsByClassName('iprice');
 	var iquantity=document.getElementsByClassName('iquantity');
 	var itotal=document.getElementsByClassName('itotal');
-	var ctotal=document.getElementsById('cTotal');
+	var cTotal=document.getElementById('cTotal');
 	var ct=0; //cart total
 
 	function subTotal(){
 		ct=0;
-		for(i = 0; i < iprice.length; i++) {
-			itotal[i].innerText = (iprice[i].value)*
-			(iquantity[i].value);
-			ct = ct +(iprice[i].value)*(iquantity[i].
-			value);
+		for ( i = 0; i < iprice.length; i++) {
+			itotal[i].innerText = (iprice[i].value)*(iquantity[i].value);
+			ct = ct + (iprice[i].value)*(iquantity[i].value);
 		}
 		cTotal.innerText = ct;
-	}
+	} 
+
 	subTotal();
-	</script>
+</script>
+
+
