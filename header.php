@@ -100,7 +100,12 @@ require 'config/config.php';
 									$count = count($_SESSION['cart']);
 								}
 								?>
-								<li><a href="cart.php"><i class="fa fa-shopping-cart"></i>Cart</a></li>							
+									<li><a href="cart.php"><i class="fa fa-shopping-cart"></i>Cart</a></li>
+									
+<?php $num_items_in_cart= isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0; 
+
+
+?>
 
 <li><a href="login.php"><i class="fa fa-lock"></i> Logout</a></li>
 							</ul>
