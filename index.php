@@ -3,9 +3,10 @@ if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 
 require "config/config.php";
 include "header.php";
+$cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
 define('title', 'Cart | E-Shopper');
 
-//
+
 $limit = 3;
 if(isset($_GET['page'])){
 $page = $_GET['page'];
@@ -57,10 +58,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 		$image = $row['image'];
 		$short_description = $row['short_description'];
 		$mrp = $row['mrp'];
-		
-		
-		
-		
+
 		$cartArray = array(
 			$prodId=>array(
 			'image'=>$image,
@@ -71,7 +69,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 		
 		}
 
-	 $sql = mysqli_query($conn, "SELECT * from carousel");
+	 $sql = mysqli_query($conn, "SELECT * from images");
 	 ?>
 			 <section id="slider"><!--slider-->
 			 <div class="container">
@@ -226,7 +224,7 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 								<form action="" method="post" enctype="multipart/form-data">
 									<ul class="nav nav-pills nav-justified">
 									<li>
-											<input type="hidden" name="prodId" value="<?php echo $prodRow['id']; ?>">
+											<input type="hidden" name="prodId" value="<?php echo $row1['id']; ?>">
 											<button type="submit" name="addToWishList" class="btn btn-secondary" style="width:95%;"><i class="fa fa-heart"> Add to wishlist</i></button>
 											</li> 
 										

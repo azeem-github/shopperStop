@@ -5,7 +5,7 @@
  error_reporting(0);
 
 //Database Connection 
-$conn = mysqli_connect('localhost', 'root', '', 'ecom');
+$conn = mysqli_connect('localhost', 'root', '', 'tshopper');
 
 
 if(!$conn){

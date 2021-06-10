@@ -42,7 +42,7 @@ if(isset($_POST['delete'])){
 				  </ol>
 				  </div><!--/breadcrums-->
 
-				  <?php if(isset($_SESSION['cart']) && count($_SESSION['cart'])>0){ }?>
+				  <?php if(isset($_SESSION['cart']) && count($_SESSION['cart'])>0){ ?>
 
 				  <div class="shopper-informations">
 				<div class="row">
@@ -124,7 +124,7 @@ if(isset($_POST['delete'])){
 				<table class="table table-condensed">
 				<thead>
 				<tr class="cart_menu">
-			<td class="image">Item</td>
+			<td class="image">Product</td>
 			<td class="description">Description</td>
 			<td class="price">Price</td>
 			<td class="quantity">Quantity</td>
@@ -159,7 +159,7 @@ if(isset($_POST['delete'])){
 				<input type="hidden" name="id" value="<?php echo $product['id']; ?>">
 				<button type="submit" name="delete" class="cart_quantity_delete btn-danger"><i class="fa fa-times"></i> Delete</button>
 				</form>
-<?php  } ?>
+
 <tr>
 <td colspan="2">&nbsp;</td>
 <td colspan="2">
@@ -178,9 +178,26 @@ if(isset($_POST['delete'])){
 								</table>
 						
 						</tr>
+						<?php } ?>
 					</tbody>
 				</table>
+				<ol>
+				<li class="cart_delete">
+							<form action="" method="POST">
+							<input type="hidden" name="prodId" value="<?php echo $product['id']; ?>">
+								<button name="deleteAll" class="btn btn-danger" style=style="margin-left:90%;class="cart_quantity_delete btn-danger" style="margin-left:87%;" href=""> Clear All Items</button>
+								</form>
+							</li>
+				</ol>
+				<?php
+			}else{ 
+				echo "<h1 align=center style=color:orange>Your Cart Is Empty </h1> <br> ";
+ } ?>
 			</div>
+			
+			<div class="buttons">
+            <input type="submit" class="btn btn-warning"  class="fa fa-cart" style="margin-left:1000px;" value="Place Order" name="placeorder">
+        
 			<div class="payment-options">
 					<span>
 						<label><input type="checkbox"> Direct Bank Transfer</label>

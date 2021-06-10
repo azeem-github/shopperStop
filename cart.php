@@ -3,8 +3,7 @@
 include 'config/config.php';
 define('title', 'Cart | E-Shopper');
 include 'header.php';
-//add to cart functionality   
-//session_destroy();
+
 if(isset($_POST['deleteAll'])){ 
 	if(isset($_SESSION['cart'])){ 
 	session_unset(); 
@@ -21,7 +20,7 @@ if(isset($_POST['delete'])){
 				if($value['id'] == $_POST['id']){
 					unset($_SESSION['cart'][$key]);
 					unset($_SESSION['prodId']);
-					echo "<script> alert('Item Removed'); </script>"; 
+					echo "<script> alert('Item has been Removed'); </script>"; 
 				}
 			}
 		}elseif(isset($_SESSION['prodId'])){
@@ -41,6 +40,7 @@ if(isset($_POST['update'])){
 				if($value['id'] == $_POST['id']){
 					$_SESSION['cart'][$key]['qty'] = $_POST['qty'];
 					//print_r($_SESSION['cart']);
+					echo "<script>alert('Quantity Updated');</script>";
 				}
 			}
 		}
@@ -54,7 +54,7 @@ if(isset($_SESSION['prodId'])){
 			$items = array_column($_SESSION['cart'], 'short_description');
 			$prod = $cartRows['short_description'];
 			if(in_array($prod, $items)){	
-				echo "<script>alert('Item already added');</script>";
+				echo "<script>alert('Item updated in Cart');</script>";
 					} else{
 						$count = count($_SESSION['cart']);
 						$_SESSION["cartItems"]=$count+1;
@@ -89,7 +89,7 @@ if(isset($_SESSION['cart'])){
 <table class="table table-condensed">
 	<thead>
 		<tr class="cart_menu">
-			<td class="image">Item</td>
+			<td class="image">Product</td>
 			<td class="description">Description</td>
 			<td class="price">Price</td>
 			<td class="quantity">Quantity</td>
@@ -104,9 +104,6 @@ if(isset($_SESSION['cart'])){
 		 foreach($_SESSION['cart'] as $product){
 			 //$total_cart = $total_cart + $product['mrp'];
 			 //$product['qty'] = 1;
-
-			// echo "<pre>";
-			 //print_r($product);
         ?>
 	<tbody>
 		<tr>
@@ -124,8 +121,8 @@ if(isset($_SESSION['cart'])){
 				<div class="cart_quantity_button">
 					<form action="" method="POST">
 					<input class="cart_quantity_input iquantity" onchange="subTotal()" type="number" name="qty" value="<?php echo $product['qty']; ?>" 
-					style="width: 50px; margin-right:0px;" min="1" max="100">
-					<button type="submit" name="update" class="cart_quantity_delete btn-warning"> Update</button>
+					style="width: 50px; height: 25px; margin-left:0px;" min="1" max="100">
+					<button type="submit" name="update" class="cart_quantity_delete btn-warning" style="width: 80px; margin-right:2px;"> Update</button>
 
 				</div>
 			</td>
@@ -223,14 +220,25 @@ if(isset($_SESSION['cart'])){
 				</div>
 				<div class="col-sm-6">
 					<div class="total_area">
-						<ul>
-							<li><h2>Cart Total <span>$</span> <span id="cTotal"></span></h2></li>
-						</ul>
+					<table class="table table-condensed total-result">
+						<td>Exo tax</td>
+						<td>$0</td>
+						</tr>
+						<tr class="shipping-cost">
+						<td>Shipping Cost</td>
+						<td>Free</td>
+						</tr>
+					
+							<td>Cart Total <span id="cTotal"></span></td>
+
+						</table>
+						<a class="btn btn-default check_out" href="checkout.php">Update</a>
 							<a class="btn btn-default check_out" href="checkout.php">Check Out</a>
 					</div>
 				</div>
 			</div>
 		</div>
+
 	</section><!--/#do_action-->
 
 <?php include 'footer.php'; ?>
