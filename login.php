@@ -1,6 +1,7 @@
 <?php 
 if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 define('title', 'Forms | E-Shopper');
+include 'config/config.php';
 include 'header.php'; 
 ?>
 
@@ -21,7 +22,7 @@ if(isset($_POST['login'])){
 		$errorpassword .= "Password Please";
 	}
 
-$conn = mysqli_connect('localhost', 'root', '', 'ecom');
+$conn = mysqli_connect('localhost', 'root', '', 'tshopper');
 //echo "SELECT * FROM user WHERE email= '$email' and password = '$password'"; 
 //exit();
 
@@ -74,7 +75,7 @@ if(empty($password)){
 	$errorpassword .= "Password is Required";
 }
 
-$conn = mysqli_connect('localhost', 'root', '', 'ecom');
+$conn = mysqli_connect('localhost', 'root', '', 'tshopper');
 
 if($email != ''){
 	$sql = "SELECT * FROM users WHERE email = '$email'";
