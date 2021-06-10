@@ -1,5 +1,5 @@
 <?php 
- //session_start();
+ session_start();
 require 'config/config.php';
 ?>
 <!DOCTYPE html>
@@ -160,3 +160,88 @@ require 'config/config.php';
 			</div>
 		</div><!--/header-bottom-->
 	</header><!--/header-->
+
+	<script type="text/javascript">
+    function updateCart(pId, cartId) {
+        console.log($('#seat_'+cartId).val())
+        $('#loader').show();
+        $.ajax({
+            url: "action.php",
+            data: "wId=" + pId + "&action=update&quantity="+$('#seat_'+cartId).val(),
+            method: "post"
+        }).done(function(response) {
+            console.log(response)
+            var data = JSON.parse(response);
+            $('#loader').hide();
+            $('.alert').show();
+            if(data.status == 0) {
+                $('.alert').addClass('alert-danger');
+                $('#result').html(data.msg);
+            } else {
+                $('.alert').addClass('alert-success');
+                $('#result').html(data.msg);
+                $('#totalPrice_'+cartId).text( data.data.totalPrice );
+                $('#subTotal').text( data.data.subTotal);
+                $('#taxes').text( data.data.taxes);
+                $('#finalPrice').text( data.data.finalPrice);
+            }
+        })
+    }
+
+    function removeItem(cartId) {
+        $('#loader').show();
+        $.ajax({
+            url: "action.php",
+            data: "cartId=" + cartId + "&action=remove",
+            method: "post"
+        }).done(function(response) {
+            console.log(response);
+            var data = JSON.parse(response);
+            $('#loader').hide();
+            $('.alert').show();
+            if(data.status == 0) {
+                $('.alert').addClass('alert-danger');
+                $('#result').html(data.msg);
+            } else {
+                $('.alert').addClass('alert-success');
+                $('#result').html(data.msg);
+                $('#item_'+cartId).remove();
+                $('#itemCount').text( data.data.itemCount);
+
+                if (data.data.itemCount == 0.00) {
+                    $('#fullCart').hide();
+                    $('#emptyCart').show();
+                } else {
+                    $('#subTotal').text( data.data.subTotal);
+                    $('#taxes').text( data.data.taxes);
+                    $('#finalPrice').text( data.data.finalPrice);
+                }
+            }
+        })
+    }
+
+    $('#clearItems').click(function(){
+        $('#loader').show();
+        $.ajax({
+            url: "action.php",
+            data: "action=clear",
+            method: "post"
+        }).done(function(response) {
+            console.log(response);
+            var data = JSON.parse(response);
+            $('#loader').hide();
+            $('.alert').show();
+            if(data.status == 0) {
+                $('.alert').addClass('alert-danger');
+                $('#result').html(data.msg);
+            } else {
+                $('.alert').addClass('alert-success');
+                $('#result').html(data.msg);
+
+                $('#itemCount').text( 0 );
+                $('#fullCart').hide();
+                $('#emptyCart').show();
+            }
+        })
+    })
+	</script>
