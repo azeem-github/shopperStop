@@ -33,6 +33,85 @@ if(isset($_POST['delete'])){
 
 
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+body {
+   font-family: Arial;
+   font-size: 15px;
+   padding: 4px;
+}
+* {
+   box-sizing: border-box;
+}
+.Fields {
+   display: flex;
+   flex-wrap: wrap;
+   padding: 20px;
+   justify-content: space-around;
+}
+.Fields div {
+   margin-right: 10px;
+}
+label {
+   margin: 15px;
+}
+.formContainer {
+   margin: 10px;
+   background-color: white;
+   padding: 5px 20px 15px 20px;
+   border: 1px solid rgb(191, 246, 250);
+   border-radius: 3px;
+}
+input[type="text"] {
+   display: inline-block;
+   width: 100%;
+   margin-bottom: 20px;
+   padding: 12px;
+   border: 1px solid #ccc;
+   border-radius: 3px;
+}
+label {
+   margin-left: 20px;
+   display: block;
+}
+.icon-formContainer {
+   margin-bottom: 20px;
+   padding: 7px 0;
+   font-size: 24px;
+}
+.checkout {
+   background-color: orange;
+   color : white;
+   padding: 12px;
+   margin: 10px 0;
+   border: none;
+   width: 100%;
+   border-radius: 3px;
+   cursor: pointer;
+   font-size: 17px;
+}
+.checkout:hover {
+   background-color: orange;
+}
+a {
+   color: black;
+}
+span.price {
+   float: right;
+   color: grey;
+}
+@media (max-width: 800px) {
+.Fields {
+   flex-direction: column-reverse;
+}
+}
+</style>
+</head>
+<body>
+
 <section id="cart_items">
 		<div class="container">
 			<div class="breadcrumbs">
@@ -209,6 +288,67 @@ if(isset($_POST['delete'])){
 						<label><input type="checkbox"> Paypal</label>
 					</span>
 				</div>
+
+				<h1 style="text-align: center;">Mode Of Payment</h1>
+
+<div class="Fields">
+<div>
+<div class="formContainer">
+<form>
+<!-- <div class="Fields">
+<div>
+<h3>Billing Address :</h3>
+<br>
+<label for="fname">Full Name</label>
+<input type="text" id="fname" name="firstname" />
+<label for="email"> Email</label>
+<input type="text" id="email" name="email" />
+<label for="adr"> Address</label>
+<input type="text" id="adr" name="address" />
+</div> -->
+<div>
+<h3>Payment:</h3>
+<br>
+<label for="cname">Name on Card</label>
+<input type="text" id="cname" name="cardname" placeholder="Name On Card" />
+<label for="ccnum">Credit card number</label>
+<input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-8888" />
+<div class="Fields">
+<div>
+<label for="expyear">Exp Year</label>
+<input type="text" id="expyear" name="expyear" placeholder="2025" />
+</div>
+<div>
+<label for="expmonth">Exp Month</label>
+<input type="text" id="expmonth" name="expmonth" placeholder="March" /><br>
+</div>
+<br> <br>
+<div>
+<label for="cvv">CVV</label>
+<input type="text" id="cvv" name="cvv" />
+</div>
+</div>
+</div>
+</div>
+<input
+type="submit"
+value="Continue to checkout"
+class="checkout"
+/>
+</form>
+</div>
+</div>
+
+</div>
+</body>
+</html>
+  
+</div>
+	</section> <!--/#cart_items-->
+  
+</div>
+	</section> <!--/#cart_items-->
+	</section> <!--/#cart_items-->
 		</div>
 	</section> <!--/#cart_items-->
 
