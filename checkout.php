@@ -30,111 +30,8 @@ if(isset($_POST['delete'])){
 		}
 	}
 }
-$erroremail = '';
-$errorpassword = '';
-
-if(isset($_POST['login'])){
-	$email = $_POST['email'];
-	$password = $_POST['password'];
-
-	if(empty($email)){
-		$erroremail .= "E-mail Please";
-	}
-
-	if(empty($password)){
-		$errorpassword .= "Password Please";
-	}
-
-$conn = mysqli_connect('localhost', 'root', '', 'tshopper');
-//echo "SELECT * FROM user WHERE email= '$email' and password = '$password'"; 
-//exit();
-
-
-$query = myssqli_query($conn, "SELECT * FROM users WHERE email= '$email' and password = '$password'");
-if(mysqli_num_rows($query) > 0){
-	header("Location: index.php");
-	echo "login Suucess";
-}
-}
 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-body {
-   font-family: Arial;
-   font-size: 15px;
-   padding: 4px;
-}
-* {
-   box-sizing: border-box;
-}
-.Fields {
-   display: flex;
-   flex-wrap: wrap;
-   padding: 10px;
-   justify-content: space-around;
-}
-.Fields div {
-   margin-right: 10px;
-}
-label {
-   margin: 15px;
-}
-.formContainer {
-   margin: 10px;
-   background-color: white;
-   padding: 5px 20px 15px 20px;
-   border: 1px solid rgb(191, 246, 250);
-   border-radius: 3px;
-}
-input[type="text"] {
-   display: inline-block;
-   width: 100%;
-   margin-bottom: 20px;
-   padding: 9px;
-   border: 1px solid #ccc;
-   border-radius: 3px;
-}
-label {
-   margin-left: 20px;
-   display: block;
-}
-.icon-formContainer {
-   margin-bottom: 20px;
-   padding: 7px 0;
-   font-size: 24px;
-}
-.checkout {
-   background-color: orange;
-   color : white;
-   padding: 12px;
-   margin: 10px 0;
-   border: none;
-   width: 100%;
-   border-radius: 3px;
-   cursor: pointer;
-   font-size: 17px;
-}
-.checkout:hover {
-   background-color: orange;
-}
-a {
-   color: black;
-}
-span.price {
-   float: right;
-   color: grey;
-}
-@media (max-width: 800px) {
-.Fields {
-   flex-direction: column-reverse;
-}
-}
-</style>
-</head>
 <body>
 
 <section id="cart_items">
@@ -151,49 +48,11 @@ span.price {
 				  <div class="shopper-informations">
 				<div class="row">
 					<div class="col-sm-3">
-						<div class="shopper-info">
-							<p>Shopper Information</p>
-							<form>
-								<input type="text" placeholder="Email">
-								<input type="password" placeholder="Password">
-							</form>
-							<a class="btn btn-primary" href="">Get Quotes</a>
-							<a class="btn btn-primary" href="checkout.php">Continue</a>
+					
 						</div>
 					</div>
-					<div class="col-sm-5 clearfix">
-						<div class="bill-to">
-							<p>Bill To</p>
-							<div class="form-one">
-								<form>
-									<input type="text" placeholder="Email*">
-									<input type="text" placeholder="First Name *">
-									<input type="text" placeholder="Middle Name">
-									<input type="text" placeholder="Last Name *">
-									<input type="text" placeholder="Address *">
-							
-								</form>
-							</div>
-							<div class="form-two">
-								<form>
-									<input type="text" placeholder="Postal Code *">
-									<input type="text" placeholder="Mobile Phone*">
-								</form>
-							</div>
-						</div>	
-					</div>
-					<div class="col-sm-4">
-						<div class="order-message">
-							<p>Shipping Order</p>
-							<textarea name="message"  placeholder="Notes about your order, Special Notes for Delivery" rows="16"></textarea>
-							<label><input type="checkbox"> Shipping to bill address</label>
-						</div>	
-					</div>					
-				</div>
-			</div>
-			<div class="review-payment">
-				<h2>Review & Payment</h2>
-			</div>
+					
+
 
 			<div class="table-responsive cart_info">
 				<table class="table table-condensed">
@@ -210,6 +69,8 @@ span.price {
 	<tbody>
 	<?php 
 	foreach($_SESSION['cart'] as $product){
+		//  $cart = $product['mrp']*$product['qty'];
+		
 		?>
 		<tr>
 		<td class="cart_product">
@@ -234,9 +95,10 @@ span.price {
 				<input type="hidden" name="id" value="<?php echo $product['id']; ?>">
 				<button type="submit" name="delete" class="cart_quantity_delete btn-danger"><i class="fa fa-times"></i> Delete</button>
 				</form>
-
+				
+				 <?php } ?>
 <tr>
-<td colspan="2">&nbsp;</td>
+<td colspan="4">&nbsp;</td>
 <td colspan="2">
 <table class="table table-condensed total-result">
 
@@ -246,21 +108,23 @@ span.price {
 									</tr>
 									<tr class="shipping-cost">
 										<td>Shipping Cost</td>
-										<td>Free</td>										
-									</tr>
-									<td>Cart Total </td>
-							<td>$130</td>
+										<td>Free</td>	
+										</tr>									
+								<td>Grand Total</td>
+
+								<td>$130</span></td>
 								</table>
 						
 						</tr>
-						<?php } ?>
 					</tbody>
 				</table>
 				<ol>
 				<li class="cart_delete">
 							<form action="" method="POST">
 							<input type="hidden" name="prodId" value="<?php echo $product['id']; ?>">
-								<button name="deleteAll" class="btn btn-danger" style=style="margin-left:90%;class="cart_quantity_delete btn-danger" style="margin-left:87%;" href=""> Clear All Items</button>
+								<button name="deleteAll" class="btn btn-danger" 
+								style=style="margin-left:90%; class="cart_quantity_delete btn-danger" 
+								style="margin-left:87%;" href=""> Clear All Items</button>
 								</form>
 							</li>
 				</ol>
@@ -270,8 +134,8 @@ span.price {
  } ?>
 			</div>
 			
-			<a href="shopper.info"></a>
-            <input type="button" class="btn btn-warning"  class="fa fa-cart" style="margin-left:1000px;" value="Checkout">
+			<form method="POST" action="userDetails.php">
+            <input type="submit" name="userdetails" value="checkout" class="btn btn-warning"  class="fa fa-cart" style="margin-left:1000px;">
         
 			<div class="payment-options">
 					<span>
@@ -284,95 +148,8 @@ span.price {
 						<label><input type="checkbox"> Paypal</label>
 					</span>
 				</div>
-
-				<h1 style="text-align: center;">Mode Of Payment</h1>
-
-<div class="Fields">
-<div>
-<div class="formContainer">
-<form>
-<!-- <div class="Fields">
-<div>
-<h3>Billing Address :</h3>
-<br>
-<label for="fname">Full Name</label>
-<input type="text" id="fname" name="firstname" />
-<label for="email"> Email</label>
-<input type="text" id="email" name="email" />
-<label for="adr"> Address</label>
-<input type="text" id="adr" name="address" />
-</div> -->
-<div>
-<h3>Payment:</h3>
-<br>
-<label for="cname">Name on Card</label>
-<input type="text" id="cname" name="cardname" placeholder="Name On Card" />
-<label for="ccnum">Credit card number</label>
-<input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-8888" />
-<div class="Fields">
-<div>
-<label for="expyear">Expiration Year</label>
-<select>
-										<option> Exp Year </option>
-										<option>2020</option>
-										<option>2021</option>
-										<option>2022</option>
-										<option>2023</option>
-										<option>2024</option>
-										<option>2025</option>
-										<option>2026</option>
-										<option>2026</option>
-									</select>
-									</div>
-									<div>
-<label for="expyear">Expiration Month</label>
-<select>
-										<option> Exp month </option>
-										<option>Jan</option>
-										<option>Feb</option>
-										<option>Mar</option>
-										<option>Apr</option>
-										<option>May</option>
-										<option>Jun</option>
-										<option>Jul</option>
-										<option>Aug</option>
-										<option>Sep</option>
-										<option>Oct</option>
-										<option>Nov</option>
-										<option>Dec</option>
-									</select>
-									</div><br>
-									<br>
-									<br>
-<div>
-<label for="cvv">CVV</label>
-<input type="text" id="cvv" name="cvv" placeholder="XXX9999"/>
-</div>
-</>
-</div>
-</div>
-<input
-type="submit"
-value="Continue to checkout"
-class="checkout"
-/>
-</form>
-</div>
-</div>
-
-</div>
-</body>
-</html>
-  
 </div>
 	</section> <!--/#cart_items-->
-  
-</div>
-	</section> <!--/#cart_items-->
-	</section> <!--/#cart_items-->
-		</div>
-	</section> <!--/#cart_items-->
-
 <?php include 'footer.php'; ?>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
