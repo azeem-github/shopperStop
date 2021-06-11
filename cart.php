@@ -1,5 +1,5 @@
 <?php
-//if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 include 'config/config.php';
 define('title', 'Cart | E-Shopper');
 include 'header.php';
@@ -16,6 +16,7 @@ if(isset($_POST['delete'])){
 	if($_POST['id'] != ''){
 		if(isset($_SESSION['cart'])){ 
 			foreach($_SESSION['cart'] as $key => $value){
+				
 				//print_r($key)
 				if($value['id'] == $_POST['id']){
 					unset($_SESSION['cart'][$key]);
@@ -36,9 +37,11 @@ if(isset($_POST['update'])){
 	if($_POST['qty'] != ''){
 		if(isset($_SESSION['cart'])){ 
 			foreach($_SESSION['cart'] as $key => $value){
+				
 				//print_r($key)
 				if($value['id'] == $_POST['id']){
 					$_SESSION['cart'][$key]['qty'] = $_POST['qty'];
+					
 					//print_r($_SESSION['cart']);
 					echo "<script>alert('Quantity Updated');</script>";
 				}
@@ -50,7 +53,9 @@ if(isset($_SESSION['prodId'])){
 	$sql = mysqli_query($conn, "SELECT id, image, short_description, mrp, qty FROM products WHERE id='$_SESSION[prodId]'");
 			while($cartRows = mysqli_fetch_assoc($sql)){
         if(isset($_SESSION['cart'])){ 
-		//	print_r($_SESSION);
+		
+		
+			//	print_r($_SESSION);
 			$items = array_column($_SESSION['cart'], 'short_description');
 			$prod = $cartRows['short_description'];
 			if(in_array($prod, $items)){	
@@ -101,8 +106,12 @@ if(isset($_SESSION['cart'])){
 		$n=1.;
 		//echo "<pre>"; print_r($_SESSION['cart']); echo "</pre>"; 
 			//foreach($sql as $product){
+
+
 		 foreach($_SESSION['cart'] as $product){
-			 //$total_cart = $total_cart + $product['mrp'];
+			 
+			
+			//$total_cart = $total_cart + $product['mrp'];
 			 //$product['qty'] = 1;
         ?>
 	<tbody>
@@ -155,7 +164,7 @@ if(isset($_SESSION['cart'])){
  } ?>
 			</div>
 		</div>
-	</section> <!--/#cart_items-->
+	</section>
 
 	<section id="do_action">
 		<div class="container">
@@ -228,7 +237,6 @@ if(isset($_SESSION['cart'])){
 						<td>Shipping Cost</td>
 						<td>Free</td>
 						</tr>
-					
 							<td>Cart Total <span id="cTotal"></span></td>
 
 						</table>
@@ -239,7 +247,7 @@ if(isset($_SESSION['cart'])){
 			</div>
 		</div>
 
-	</section><!--/#do_action-->
+	</section>
 
 <?php include 'footer.php'; ?>
 
@@ -266,7 +274,9 @@ if(isset($_SESSION['cart'])){
     }).click(function() {
 	removeModal();
     }).appendTo('body');
-    //handling ESC
+    
+	
+	//Handling ESC
     $('body').on('keyup.modal-close', function(e) {
 	if (e.key === 'Escape') {
 	removeModal();
@@ -280,8 +290,9 @@ if(isset($_SESSION['cart'])){
 	var iquantity=document.getElementsByClassName('iquantity');
 	var itotal=document.getElementsByClassName('itotal');
 	var cTotal=document.getElementById('cTotal');
-	var ct=0; //cart total
-
+	var ct=0; 
+	
+	// CART TOTAL
 	function subTotal(){
 		ct=0;
 		for ( i = 0; i < iprice.length; i++) {
