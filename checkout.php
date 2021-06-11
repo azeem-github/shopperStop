@@ -1,5 +1,5 @@
 <?php
-// session_start();
+ session_start();
 define('title', 'Checkout | E-shopper');
 include 'header.php';
 if(isset($_SESSION['cart'])){
