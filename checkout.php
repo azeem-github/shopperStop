@@ -30,7 +30,32 @@ if(isset($_POST['delete'])){
 		}
 	}
 }
+$erroremail = '';
+$errorpassword = '';
 
+if(isset($_POST['login'])){
+	$email = $_POST['email'];
+	$password = $_POST['password'];
+
+	if(empty($email)){
+		$erroremail .= "E-mail Please";
+	}
+
+	if(empty($password)){
+		$errorpassword .= "Password Please";
+	}
+
+$conn = mysqli_connect('localhost', 'root', '', 'tshopper');
+//echo "SELECT * FROM user WHERE email= '$email' and password = '$password'"; 
+//exit();
+
+
+$query = myssqli_query($conn, "SELECT * FROM users WHERE email= '$email' and password = '$password'");
+if(mysqli_num_rows($query) > 0){
+	header("Location: index.php");
+	echo "login Suucess";
+}
+}
 
 ?>
 <!DOCTYPE html>
@@ -49,7 +74,7 @@ body {
 .Fields {
    display: flex;
    flex-wrap: wrap;
-   padding: 20px;
+   padding: 10px;
    justify-content: space-around;
 }
 .Fields div {
@@ -69,7 +94,7 @@ input[type="text"] {
    display: inline-block;
    width: 100%;
    margin-bottom: 20px;
-   padding: 12px;
+   padding: 9px;
    border: 1px solid #ccc;
    border-radius: 3px;
 }
@@ -129,13 +154,11 @@ span.price {
 						<div class="shopper-info">
 							<p>Shopper Information</p>
 							<form>
-								<input type="text" placeholder="Display Name">
-								<input type="text" placeholder="User Name">
+								<input type="text" placeholder="Email">
 								<input type="password" placeholder="Password">
-								<input type="password" placeholder="Confirm password">
 							</form>
 							<a class="btn btn-primary" href="">Get Quotes</a>
-							<a class="btn btn-primary" href="">Continue</a>
+							<a class="btn btn-primary" href="checkout.php">Continue</a>
 						</div>
 					</div>
 					<div class="col-sm-5 clearfix">
@@ -143,45 +166,18 @@ span.price {
 							<p>Bill To</p>
 							<div class="form-one">
 								<form>
-									<input type="text" placeholder="Company Name">
 									<input type="text" placeholder="Email*">
-									<input type="text" placeholder="Title">
 									<input type="text" placeholder="First Name *">
 									<input type="text" placeholder="Middle Name">
 									<input type="text" placeholder="Last Name *">
-									<input type="text" placeholder="Address 1 *">
-									<input type="text" placeholder="Address 2">
+									<input type="text" placeholder="Address *">
+							
 								</form>
 							</div>
 							<div class="form-two">
 								<form>
-									<input type="text" placeholder="Zip / Postal Code *">
-									<select>
-										<option>-- Country --</option>
-										<option>United States</option>
-										<option>Bangladesh</option>
-										<option>UK</option>
-										<option>India</option>
-										<option>Pakistan</option>
-										<option>Ucrane</option>
-										<option>Canada</option>
-										<option>Dubai</option>
-									</select>
-									<select>
-										<option>-- State / Province / Region --</option>
-										<option>United States</option>
-										<option>Bangladesh</option>
-										<option>UK</option>
-										<option>India</option>
-										<option>Pakistan</option>
-										<option>Ucrane</option>
-										<option>Canada</option>
-										<option>Dubai</option>
-									</select>
-									<input type="password" placeholder="Confirm password">
-									<input type="text" placeholder="Phone *">
-									<input type="text" placeholder="Mobile Phone">
-									<input type="text" placeholder="Fax">
+									<input type="text" placeholder="Postal Code *">
+									<input type="text" placeholder="Mobile Phone*">
 								</form>
 							</div>
 						</div>	
@@ -274,8 +270,8 @@ span.price {
  } ?>
 			</div>
 			
-			<div class="buttons">
-            <input type="submit" class="btn btn-warning"  class="fa fa-cart" style="margin-left:1000px;" value="Place Order" name="placeorder">
+			<a href="shopper.info"></a>
+            <input type="button" class="btn btn-warning"  class="fa fa-cart" style="margin-left:1000px;" value="Checkout">
         
 			<div class="payment-options">
 					<span>
@@ -315,19 +311,44 @@ span.price {
 <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-8888" />
 <div class="Fields">
 <div>
-<label for="expyear">Exp Year</label>
-<input type="text" id="expyear" name="expyear" placeholder="2025" />
-</div>
-<div>
-<label for="expmonth">Exp Month</label>
-<input type="text" id="expmonth" name="expmonth" placeholder="March" /><br>
-</div>
-<br> <br>
+<label for="expyear">Expiration Year</label>
+<select>
+										<option> Exp Year </option>
+										<option>2020</option>
+										<option>2021</option>
+										<option>2022</option>
+										<option>2023</option>
+										<option>2024</option>
+										<option>2025</option>
+										<option>2026</option>
+										<option>2026</option>
+									</select>
+									</div>
+									<div>
+<label for="expyear">Expiration Month</label>
+<select>
+										<option> Exp month </option>
+										<option>Jan</option>
+										<option>Feb</option>
+										<option>Mar</option>
+										<option>Apr</option>
+										<option>May</option>
+										<option>Jun</option>
+										<option>Jul</option>
+										<option>Aug</option>
+										<option>Sep</option>
+										<option>Oct</option>
+										<option>Nov</option>
+										<option>Dec</option>
+									</select>
+									</div><br>
+									<br>
+									<br>
 <div>
 <label for="cvv">CVV</label>
-<input type="text" id="cvv" name="cvv" />
+<input type="text" id="cvv" name="cvv" placeholder="XXX9999"/>
 </div>
-</div>
+</>
 </div>
 </div>
 <input
