@@ -3,7 +3,13 @@ if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 require "config/config.php";
 $title = "Home | E-Shopper";
 include "header.php";
-
+?>
+<section id="advertisement">
+		<div class="container">
+			<img src="images/shop/advertisement.jpg" alt="" />
+		</div>
+	</section>
+	<?php
 //
 $limit = 3;
 if(isset($_GET['page'])){
