@@ -1,5 +1,5 @@
 <?php 
-if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
+session_start(); 
 require 'config/config.php';
 include 'header.php';
 
@@ -115,7 +115,7 @@ if(empty($cvv)){
    $errorcvvv .= "Last 4-Digit Number Is Required";
 }
 
- $sql = "INSERT INTO payment (id, cardname, cardnumber, exp_year, exp_month, cvv) VALUES ('$id', '$cardname', '$cardnumber','$exp_year','$exp_month',
+ $sql = "INSERT INTO payment (cardname, cardnumber, exp_year, exp_month, cvv) VALUES ('$cardname', '$cardnumber','$exp_year','$exp_month',
 '$cvv')";
 $result = mysqli_query($conn, $sql);
 if($result === TRUE){
