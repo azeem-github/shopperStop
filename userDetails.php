@@ -69,19 +69,6 @@
             <input class="form-control" type="text" id="billing_city" name="billing_city" placeholder="Hydearabad" value="Hyderabad">
           </div>
         </div>
-
-        <div class="row">
-          <div class="col-md-5">
-            <div class="form-group">
-              <div class="input-group">
-                <div class="input-group-addon addon-diff-color">
-                    <span class="glyphicon glyphicon-home"></span>
-                </div>
-                <input class="form-control" type="text" id="billing_state" name="billing_state" placeholder="xyz" value="xyz">
-              </div>
-            </div>
-          </div>
-          <div class="col-md-5 col-md-offset-2">
             <div class="form-group">
               <div class="input-group">
                 <div class="input-group-addon addon-diff-color">
@@ -90,8 +77,7 @@
                 <input class="form-control" type="text" id="billing_zip" name="billing_zip" placeholder="400-000-3" value="400-000-3">
               </div>
             </div>
-          </div> 
-        </div>
+    
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon addon-diff-color">
@@ -108,14 +94,14 @@
           <table class="table">
             <tbody>
               <?php 
-                foreach ($cartItems as $key => $product) { 
+                foreach ($cart as $key => $product) { 
                ?>    
                 <tr>
                   <td align="right" width="85%">
                     <a href="#"><?= $product['id']; ?></a>
                   </td>
                   <td width="15%">
-                    <strong><span>&#x20b9;</span><?= ($cartItem['mrp']*$cartItem['quantity']); ?></strong>
+                    <strong><span>&#x20b9;</span><?= ($product['mrp']*$product['quantity']); ?></strong>
                   </td>
               </tr>
               <?php } ?>
