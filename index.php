@@ -3,8 +3,16 @@ if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 
 require "config/config.php";
 include "header.php";
+?>
+<section id="advertisement">
+		<div class="container">
+			<img src="images/shop/advertisement.jpg" alt="" />
+		</div>
+	</section>
+	<?php
 $cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
 define('title', 'Cart | E-Shopper');
+
 
 
 $limit = 3;
