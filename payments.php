@@ -1,12 +1,9 @@
 <?php 
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 require 'config/config.php';
 include 'header.php';
 
 ?>
-<!DOCTYPE html>
-<html>
-<head> </head>
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,6 +82,50 @@ span.price {
 </style>
 </head>
 <body>
+<?php
+
+$errorcardname = '';
+$errorcardnumber = '';
+$errorexp_year = '';
+$errorexp_month ='';
+$errorcvv ='';
+
+if(isset($_POST['submit'])){
+
+   $cardname = $_POST['cardname'];
+   $cardnumber = $_POST['cardnumber'];
+   $exp_year = $_POST['exp_year'];
+   $exp_month = $_POST['exp_month'];
+   $cvv = $_POST['cvv'];
+
+if(empty($cardname)){
+   $errorcardname .= "Card Number Is Required";
+}
+if(empty($cardnumber)){
+   $errorcardnumber .= "Card Number Is Required";
+}
+
+if(empty($exp_year)){
+   $errorexp_year .= "Year Of Expiry is Required";
+}
+if(empty($exp_month)){
+   $errorexp_month .= "Month Of Expiry Is Required";
+}
+if(empty($cvv)){
+   $errorcvvv .= "Last 4-Digit Number Is Required";
+}
+
+ $sql = "INSERT INTO payment (id, cardname, cardnumber, exp_year, exp_month, cvv) VALUES ('$id', '$cardname', '$cardnumber','$exp_year','$exp_month',
+'$cvv')";
+$result = mysqli_query($conn, $sql);
+if($result === TRUE){
+   header("Location: OrderDetail.php");
+    
+   echo "<script>alert('Successfull!');</script>";
+}   
+}
+
+?> 
 <section id="cart_items">
 		<div class="container">
 			<div class="breadcrumbs">
@@ -95,64 +136,29 @@ span.price {
 				  </div><!--/breadcrums-->
 
 <h1 style="text-align: center;">Mode Of Payment</h1>
-
-<div class="Fields">
-<div>
 <div class="formContainer">
 <form>
 <div>
 <h3>Payment:</h3>
 <br>
 <label for="cname">Name on Card</label>
-<input type="text" id="cname" name="cardname" placeholder="Name On Card" />
+<input type="text"  name="cardname" placeholder="Name On Card" /><span style="color:red";><?php echo $errorcardname;?></span></i>
 <label for="ccnum">Credit card number</label>
-<input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-8888" />
-<div class="Fields">
-<div>
-<label for="expyear">Expiration Year</label>
-<select>
-										<option> Exp Year </option>
-										<option>2020</option>
-										<option>2021</option>
-										<option>2022</option>
-										<option>2023</option>
-										<option>2024</option>
-										<option>2025</option>
-										<option>2026</option>
-										<option>2026</option>
-									</select>
-									</div>
-									<div>
-<label for="expyear">Expiration Month</label>
-<select>
-										<option> Exp month </option>
-										<option>Jan</option>
-										<option>Feb</option>
-										<option>Mar</option>
-										<option>Apr</option>
-										<option>May</option>
-										<option>Jun</option>
-										<option>Jul</option>
-										<option>Aug</option>
-										<option>Sep</option>
-										<option>Oct</option>
-										<option>Nov</option>
-										<option>Dec</option>
-									</select>
-									</div><br>
-									<br>
-									<br>
-<div>
-<label for="cvv">CVV</label>
-<input type="text" id="cvv" name="cvv" placeholder="XXX9999"/>
+<input type="text" name="cardnumber" placeholder="1111-2222-8888" /><span style="color:red";><?php echo $errorcardnumber;?></span></i>
+<label for="ccnum">Year Of Expiry</label>
+<input type="text" name="exp_year" placeholder="2020"><span style="color:red";><?php echo $errorexp_year;?></span>
+<label for="ccnum">Month Of Expiry</label>
+<input type="text" name="exp_year" placeholder="2020"><span style="color:red";><?php echo $errorexp_year;?></span>
+<label for="ccnum">CVV</label>
+<input type="text" name="cvv" placeholder="XXX9999"><span style="color:red";><?php echo $errorcvv;?></span>
 </div>
-</div>
-</div>
-<form method="POST" action="orderplaced.php">
-<input type="submit" value="Place Order" class="btn btn-warning btn-block">
+
+<form method="POST" action="">
+<input type="submit" name="submit" value="Place Order" class="btn btn-warning btn-block">
 </div>
 </div>
 </form>
+</div>
 </div>
 </section>
 </body>

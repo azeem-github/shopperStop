@@ -101,7 +101,7 @@ if(isset($_POST['submit'])){
             <div class="input-group-addon addon-diff-color">
                 <span class="glyphicon glyphicon-envelope"></span>
             </div>
-            <input class="form-control" type="email" name="email" placeholder="example@gmail.com"><span style="color:red";><?php echo $erroemail;?></span></i>
+            <input class="form-control" type="email" name="email" placeholder="example@gmail.com"><span style="color:red";><?php echo $erroremail;?></span></i>
           </div>
         </div>
 

@@ -135,7 +135,7 @@ if(isset($_POST['delete'])){
 			</div>
 			
 			<form method="POST" action="userDetails.php">
-            <input type="submit" name="userdetails" value="checkout" class="btn btn-warning"  class="fa fa-cart" style="margin-left:1000px;">
+            <input type="submit" name="checkout" value="checkout" class="btn btn-warning"  class="fa fa-cart" style="margin-left:1000px;">
         
 			<div class="payment-options">
 					<span>
