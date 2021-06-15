@@ -1,6 +1,6 @@
 <?php
 if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
-include 'config/config.php';
+require 'config/config.php';
 define('title', 'Cart | E-Shopper');
 include 'header.php';
 

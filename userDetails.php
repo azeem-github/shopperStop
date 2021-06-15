@@ -3,13 +3,6 @@ if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 require 'config/config.php';
 define('title', 'User-Details | E-Shopper');
 include 'header.php';
-  
-
-if(isset($_POST['submit'])){
-	 $_SESSION['prodId'] = $_POST['id'];
-	echo "<script>window.location.href='payments.php';</script>";
-
-}
 
 ?>
 <!DOCTYPE html>

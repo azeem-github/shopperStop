@@ -1,6 +1,5 @@
 <?php 
 if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
-
 require "config/config.php";
 include "header.php";
 ?>
@@ -224,7 +223,8 @@ if (isset($_POST['prodId']) && $_POST['prodId']!=""){
 										<h2>$ <?php echo $row1['mrp']; ?></h2>
 											<p><?php echo $row1['short_description']; ?></p>
 											<input type="hidden" name="id" value="<?php echo $row1['id']; ?>">
-										<button type="submit" name="addCart" class="btn btn-warning" style="width:100%;"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+										<button type="submit" name="addCart" class="btn btn-warning" style="width:100%;">
+										<i class="fa fa-shopping-cart"></i> Add to Cart</button>
 									</form>
 									</div>
 								</div>

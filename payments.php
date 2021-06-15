@@ -151,7 +151,7 @@ Expiry Date<input type="text" name="expmonth" placeholder="2020"><span style="co
 CVV <input type="text" name="cvv" placeholder="XXX9999"><span style="color:red";><?php echo $errorcvv;?></span>
 </div>
 <form method="POST" action="">
-<input type="submit" name="submit" class="btn btn-warning btn-block">Place Order</input>
+<a href="OrderDetail.php" input type="submit" name="submit" class="btn btn-warning btn-block">Place Order</a>
 </div>
 </form>
 </div>

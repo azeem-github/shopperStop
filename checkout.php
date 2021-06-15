@@ -1,5 +1,6 @@
 <?php
- session_start();
+ if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
+ require 'config/config.php';
 define('title', 'Checkout | E-shopper');
 include 'header.php';
 if(isset($_SESSION['cart'])){
@@ -31,6 +32,11 @@ if(isset($_POST['delete'])){
 	}
 }
 
+if(isset($_POST['check'])){
+	$_SESSION['prodId'] = $_POST['id'];
+   echo "<script>window.location.href='cart.php';</script>";
+
+}
 ?>
 <body>
 
