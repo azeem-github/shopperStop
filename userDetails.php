@@ -1,6 +1,6 @@
 <?php
 if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
-include 'config/config.php';
+require 'config/config.php';
 define('title', 'User-Details | E-Shopper');
 include 'header.php';
   
@@ -10,6 +10,7 @@ if(isset($_POST['submit'])){
 	echo "<script>window.location.href='payments.php';</script>";
 
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,6 +45,7 @@ $erroremail = '';
 $errormobile = '';
 $erroraddress = '';
 $errorcity = '';
+$errorstate = '';
 $errorzip_code = '';
 $errorcountry = '';
 
@@ -54,6 +56,7 @@ if(isset($_POST['submit'])){
     $mobile = $_POST['mobile'];
     $address = $_POST['address'];
     $city = $_POST['city'];
+    $city = $_POST['state'];
     $zip_code = $_POST['zip_code'];
     $country = $_POST['country'];
 
@@ -72,14 +75,18 @@ if(isset($_POST['submit'])){
         if(empty($city)){
           $errorcity .= "City Is Required";
       }
+      if(empty($state)){
+        $errorstate .= "City Is Required";
+    }
       if(empty($zip_code)){
         $errorzip_code .= "Zip Code Is Required";
     }
     if(empty($country)){
       $errorcountry .= "Country Is Required";
   }    
-        $sql = "INSERT INTO user_details (name, email, mobile, address, city, zip_code, country)VALUES('$name', '$email', '$mobile',
-         '$address', '$city', '$zip_code', '$country')";
+  
+        $sql = "INSERT INTO user_details (name, email, mobile, address, city, state zip_code, country)VALUES('$name', '$email', '$mobile',
+         '$address', '$city','$state', '$zip_code', '$country')";
         $result = mysqli_query($conn, $sql);
         if($result === TRUE){
            header("Location: payments.php");
@@ -107,7 +114,7 @@ if(isset($_POST['submit'])){
             <div class="input-group-addon addon-diff-color">
                 <span class="glyphicon glyphicon-envelope"></span>
             </div>
-            <input class="form-control" type="email" name="email" placeholder="example@gmail.com"><span style="color:red";><?php echo $erroemail;?></span></i>
+            <input class="form-control" type="email" name="email" placeholder="example@gmail.com"><span style="color:red";><?php echo $erroremail;?></span></i>
           </div>
         </div>
 
@@ -188,7 +195,7 @@ if(isset($_POST['submit'])){
             <tbody>
               <?php 
               foreach($_SESSION['cart'] as $product){
-                //  $cart = $product['mrp']*$product['qty'];
+
                 
                 ?>
                 <tr>
