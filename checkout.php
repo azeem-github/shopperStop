@@ -110,9 +110,7 @@ if(isset($_POST['delete'])){
 										<td>Shipping Cost</td>
 										<td>Free</td>	
 										</tr>									
-								<td>Grand Total</td>
-
-								<td>$130</span></td>
+								<td>Grand Total<span id="cTotal"></span></td>
 								</table>
 						
 						</tr>
