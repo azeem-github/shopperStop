@@ -1,9 +1,10 @@
-<?php 
-session_start(); 
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
 require 'config/config.php';
+define('title', 'Payments | E-Shopper');
 include 'header.php';
+    ?>
 
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,50 +83,48 @@ span.price {
 </style>
 </head>
 <body>
+
 <?php
+ $errorcardname = '';
+ $errorcardnumber = '';
+ $errorexpyear = '';
+ $errorexpmonth = '';
+ $errorcvv = '';
 
-$errorcardname = '';
-$errorcardnumber = '';
-$errorexp_year = '';
-$errorexp_month ='';
-$errorcvv ='';
+ if(isset($_POST['submit'])){
 
-if(isset($_POST['submit'])){
+    $cardname = $_POST['cardname'];
+    $cardnumber = $_POST['cardnumber'];
+    $expyear = $_POST['expyear'];
+    $expmonth = $_POST['expmonth'];
+    $cvv = $_POST['cvv'];
 
-   $cardname = $_POST['cardname'];
-   $cardnumber = $_POST['cardnumber'];
-   $exp_year = $_POST['exp_year'];
-   $exp_month = $_POST['exp_month'];
-   $cvv = $_POST['cvv'];
+    if(empty($cardname)){
+       $errorcardname .= "Card Name Is Required";
+    }
+    if(empty($cardnumber)){
+       $errorcardnumber .= "Card Number Is Required";
+    }
 
-if(empty($cardname)){
-   $errorcardname .= "Card Number Is Required";
-}
-if(empty($cardnumber)){
-   $errorcardnumber .= "Card Number Is Required";
-}
+    if(empty($expyear)){
+       $errorexpyear .= "Year Expiry Is A Must";
+    }
+    if(empty($expmonth)){
+       $errorexpmonth .= "Month Of Expiry Is A Must";
+    }
 
-if(empty($exp_year)){
-   $errorexp_year .= "Year Of Expiry is Required";
-}
-if(empty($exp_month)){
-   $errorexp_month .= "Month Of Expiry Is Required";
-}
-if(empty($cvv)){
-   $errorcvvv .= "Last 4-Digit Number Is Required";
-}
+    $sql = "INSERT INTO payment(cardname, cardnumber, expyear, expmonth, cvv) VALUES ('$cardname', '$cardnumber', '$expyear', '$expmonth',
+    '$cvv')";
+        $result = mysqli_query($conn, $sql);
+        if($result === TRUE){
+           header("Location: OrderDetail.php");
+            
+           echo "<script>alert('Successfull!');</script>";
+        }   
+    }
 
- $sql = "INSERT INTO payment (cardname, cardnumber, exp_year, exp_month, cvv) VALUES ('$cardname', '$cardnumber','$exp_year','$exp_month',
-'$cvv')";
-$result = mysqli_query($conn, $sql);
-if($result === TRUE){
-   header("Location: OrderDetail.php");
-    
-   echo "<script>alert('Successfull!');</script>";
-}   
-}
+?>
 
-?> 
 <section id="cart_items">
 		<div class="container">
 			<div class="breadcrumbs">
@@ -141,21 +140,18 @@ if($result === TRUE){
 <div>
 <h3>Payment:</h3>
 <br>
-<label for="cname">Name on Card</label>
-<input type="text"  name="cardname" placeholder="Name On Card" /><span style="color:red";><?php echo $errorcardname;?></span></i>
-<label for="ccnum">Credit card number</label>
-<input type="text" name="cardnumber" placeholder="1111-2222-8888" /><span style="color:red";><?php echo $errorcardnumber;?></span></i>
-<label for="ccnum">Year Of Expiry</label>
-<input type="text" name="exp_year" placeholder="2020"><span style="color:red";><?php echo $errorexp_year;?></span>
-<label for="ccnum">Month Of Expiry</label>
-<input type="text" name="exp_year" placeholder="2020"><span style="color:red";><?php echo $errorexp_year;?></span>
-<label for="ccnum">CVV</label>
-<input type="text" name="cvv" placeholder="XXX9999"><span style="color:red";><?php echo $errorcvv;?></span>
-</div>
+Card Name: <input type="text"  name="cardname" placeholder="Name On Card" /><span style="color:red";><?php echo $errorcardname;?></span></i>
 
-<form method="POST" action="">
-<input type="submit" name="submit" value="Place Order" class="btn btn-warning btn-block">
+Card number: <input type="text" name="cardnumber" placeholder="1111-2222-8888" /><span style="color:red";><?php echo $errorcardnumber;?></span></i>
+
+Expiry Year: <input type="text" name="expyear" placeholder="2020"><span style="color:red";><?php echo $errorexp_year;?></span>
+
+Expiry Date<input type="text" name="expmonth" placeholder="2020"><span style="color:red";><?php echo $errorexp_month;?></span>
+
+CVV <input type="text" name="cvv" placeholder="XXX9999"><span style="color:red";><?php echo $errorcvv;?></span>
 </div>
+<form method="POST" action="">
+<input type="submit" name="submit" class="btn btn-warning btn-block">Place Order</input>
 </div>
 </form>
 </div>
@@ -163,5 +159,4 @@ if($result === TRUE){
 </section>
 </body>
 </html>
-
 <?php include 'footer.php'; ?>
