@@ -1,10 +1,16 @@
-<?php 
-    session_start();
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
+include 'config/config.php';
+define('title', 'User-Details | E-Shopper');
+include 'header.php';
+  
 
-    require 'config/config.php';
-    include 'header.php';
-    ?>
+if(isset($_POST['submit'])){
+	 $_SESSION['prodId'] = $_POST['id'];
+	echo "<script>window.location.href='payments.php';</script>";
 
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -86,7 +92,7 @@ if(isset($_POST['submit'])){
     <div class="row">
       <div class="col-md-7 well">
         <h3>Billing Address</h3>
-        <form action="payments.php" method="POST">
+        <form action="" method="POST">
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon addon-diff-color">
@@ -101,7 +107,7 @@ if(isset($_POST['submit'])){
             <div class="input-group-addon addon-diff-color">
                 <span class="glyphicon glyphicon-envelope"></span>
             </div>
-            <input class="form-control" type="email" name="email" placeholder="example@gmail.com"><span style="color:red";><?php echo $erroremail;?></span></i>
+            <input class="form-control" type="email" name="email" placeholder="example@gmail.com"><span style="color:red";><?php echo $erroemail;?></span></i>
           </div>
         </div>
 
