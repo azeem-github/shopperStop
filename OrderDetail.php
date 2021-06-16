@@ -66,9 +66,10 @@ h2 {
             <td class="cart_total itotal">
             <p> <?php echo $product['mrp']*$product['qty'];?></p>
         </td>
+        <?php } ?>
             </tbody>
           </table>
-          <?php } ?>
+        
           <hr>
           <td>Cart Total :<span id="cTotal"></span></td>
         <div class="text-right">
