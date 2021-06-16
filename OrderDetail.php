@@ -11,7 +11,7 @@ include 'header.php';
   <link rel="stylesheet" href="../library/css/bootstrap.min.css">
 <style>
 h2 {
-    margin-top: 0px;
+    margin-top: 10px;
     padding-top: 0px;
     color: orange;
     text-align : center;
@@ -20,23 +20,24 @@ h2 {
       text-align: center;
       color: orange;
   }
-  
+  h4{
+      text-align: center;
+      color: orange;
+  }
   </style>
 </head>
-<?php
-echo "<h2>Order Has Been Placed Successfully !</h2>";
-?>
-
-<section id="cart_items">
-		<div class="container">
-			<div class="breadcrumbs">
-			</div>
-			<div class="table-responsive cart_info">
-
-<table class="table table-condensed">
-          
+ <div class="col-md-8 col-md-offset-1 well">
+        <div class="text-right">
+                  <hr>
+                  <?php
+      if(isset($_SESSION['cart'])){
+        ?>
+          <!-- <h4><span class="glyphicon glyphicon-shopping-cart"></span><sup id="itemCount"><?php //= //$cartPrices['itemCount']; ?></sup></h4> -->
+          <table class="table">
+          <h2> Your Order Is Placed Successfully !</h2><br>
+              
           <thead>
-				<tr class="cart_menu">
+				<tr>
 			<td class="image">Product</td>
 			<td class="description">Description</td>
 			<td class="price">Price</td>
@@ -50,7 +51,7 @@ echo "<h2>Order Has Been Placed Successfully !</h2>";
                 ?>
                 <tr>
                 <td class="cart_product">
-                <img data-enlargeable style="cursor: zoom-in" src="images/Uploads/<?php echo $product['image']; ?>" width="80" height="80" alt="">
+                <img data-enlargeable style="cursor: zoom-in" src="images/Uploads/<?php echo $product['image']; ?>" width="40" height="40" alt="">
                 </td>
                 <td class="cart_description">
                 
@@ -60,24 +61,26 @@ echo "<h2>Order Has Been Placed Successfully !</h2>";
                 <p>$<?php echo $product['mrp'];?></p>
                 </td>
             <td class="cart_quantity">
-            <div class="cart_quantity_button">
-            <p class="cart_quantity_input"> <?php echo $product['qty'];?></p>
-            </td>
+            <p> <?php echo $product['qty'];?></p>
+            
             <td class="cart_total itotal">
-            <p class="cart_quantity_input"> <?php echo $product['mrp']*$product['qty'];?></p>
-              <?php } ?>
+            <p> <?php echo $product['mrp']*$product['qty'];?></p>
+        </td>
             </tbody>
           </table>
+          <?php } ?>
           <hr>
-          <span name="cTotal"></span></td>
+          <td>Cart Total :<span id="cTotal"></span></td>
         <div class="text-right">
         </div>
-      </div>
-    </div>
-  </form>
-<?php echo "<h3>Cash On delivery</h3>"; ?>
-   <!-- <input type="checkbox"  name="sameadr">Cash On delivery
-        </label> -->
+    <?php
+    }else {
+      echo "<h2>Payment Was too lonely</h2>";
+      echo "<h4>Please add items to place order</h4>";
+
+    } ?>
+   
+
 <?php include 'footer.php'; ?>
 
 <script>
