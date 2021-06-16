@@ -4,6 +4,8 @@ require 'config/config.php';
 define('title', 'User-Details | E-Shopper');
 include 'header.php';
 
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -49,7 +51,7 @@ if(isset($_POST['submit'])){
     $mobile = $_POST['mobile'];
     $address = $_POST['address'];
     $city = $_POST['city'];
-    $city = $_POST['state'];
+    $state = $_POST['state'];
     $zip_code = $_POST['zip_code'];
     $country = $_POST['country'];
 
@@ -69,7 +71,7 @@ if(isset($_POST['submit'])){
           $errorcity .= "City Is Required";
       }
       if(empty($state)){
-        $errorstate .= "City Is Required";
+        $errorstate .= "State Is Required";
     }
       if(empty($zip_code)){
         $errorzip_code .= "Zip Code Is Required";
@@ -77,16 +79,26 @@ if(isset($_POST['submit'])){
     if(empty($country)){
       $errorcountry .= "Country Is Required";
   }    
+  if ($email != ''){
+    $sql = "SELECT * FROM user_details WHERE(email = '$email')";
+    $search = mysqli_query($conn, $sql);
+    $rows = mysqli_num_rows($search);
+    if($rows > 0){
+      $erroremail .= "Email Already Exists";
+    } else {
+
   
-        $sql = "INSERT INTO user_details (name, email, mobile, address, city, state zip_code, country)VALUES('$name', '$email', '$mobile',
+        $sql = "INSERT INTO user_details (name, email, mobile, address, city, state, zip_code, country)VALUES('$name', '$email', '$mobile',
          '$address', '$city','$state', '$zip_code', '$country')";
         $result = mysqli_query($conn, $sql);
         if($result === TRUE){
-           header("Location: payments.php");
-            
+        
            echo "<script>alert('Successfull!');</script>";
+           header("Location: payments.php");
         }   
     }
+  }
+}
 ?> 
 
     <div class="row">
@@ -168,8 +180,17 @@ if(isset($_POST['submit'])){
             <input class="form-control" type="text" name="country" placeholder="India"><span style="color:red";><?php echo $errorcountry;?></span></i>
           </div>
         </div>
+        
+        <input type="hidden" name="id" value="<?php echo $row1['id']; ?>">
+        <input type="hidden" name="prodId" value="<?php echo $row1['id']; ?>">
+										<button type="submit" name="submit" class="btn btn-warning" style="width:100%;">
+										<i class="fa fa-shopping-card"></i>Proceed To Mode Of Payment</button>
       </div>
       <div class="col-md-4 col-md-offset-1 well">
+
+      <?php
+      if(isset($_SESSION['cart'])){
+        ?>
         <div class="text-right">
                   <h3>Your Order</h3>
                   <hr>
@@ -188,8 +209,6 @@ if(isset($_POST['submit'])){
             <tbody>
               <?php 
               foreach($_SESSION['cart'] as $product){
-
-                
                 ?>
                 <tr>
                 <td class="cart_product">
@@ -203,28 +222,65 @@ if(isset($_POST['submit'])){
                 <p>$<?php echo $product['mrp'];?></p>
                 </td>
             <td class="cart_quantity">
-            <div class="cart_quantity_button">
-            <p class="cart_quantity_input"> <?php echo $product['qty'];?></p>
+            <p> <?php echo $product['qty'];?></p>
             </td>
             <td class="cart_total itotal">
-            <p class="cart_quantity_input"> <?php echo $product['mrp']*$product['qty'];?></p>
+            <p> <?php echo $product['mrp']*$product['qty'];?></p>
               <?php } ?>
             </tbody>
           </table>
           <hr>
           <td>Cart Total :<span id="cTotal"></span></td>
         <div class="text-right">
-        <form method="POST" action="payments.php">
-          <input type="submit" name="submit" value="Proceed to Mode Of Payment" class="btn btn-warning btn-block">
         </div>
       </div>
     </div>
   </form>
+  <?php 
+  	}else{ 
+      echo "<p align=center style=color:orange>Its Pretty Lonely in here Add Items Please ! :( </p> <br> ";
+} ?>
 </div>
+
 </body>
 </html>
+</div>
 
 <?php include 'footer.php';?>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script>
+	$('img[data-enlargeable]').addClass('img-enlargeable').click(function() {
+    var src = $(this).attr('src');
+    var modal;
+  
+    function removeModal() {
+	modal.remove();
+	$('body').off('keyup.modal-close');
+    }
+    modal = $('<div>').css({
+	background: 'RGBA(0,0,0,0.7) url(' + src + ') no-repeat center',
+	backgroundSize: 'contain',
+	width: '100%',
+	height: '100%',
+	position: 'fixed',
+	zIndex: '10000',
+	top: '0',
+	left: '0',
+	cursor: 'zoom-out'
+    }).click(function() {
+	removeModal();
+    }).appendTo('body');
+    
+	
+	//Handling ESC
+    $('body').on('keyup.modal-close', function(e) {
+	if (e.key === 'Escape') {
+	removeModal();
+	}
+    });
+	});
+	</script>
 
 <script>
 	var iprice=document.getElementsByClassName('iprice');
