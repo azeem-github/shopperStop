@@ -23,6 +23,10 @@ include 'header.php';
     margin-top: 0px;
     padding-top: 0px;
   }
+  h5 {
+    margin-top: 10px;
+    padding-top: 70px;
+  }
   td {
     border-top: none !important;
   }
@@ -94,7 +98,7 @@ if(isset($_POST['submit'])){
         if($result === TRUE){
         
            echo "<script>alert('Successfull!');</script>";
-           header("Location: payments.php");
+            header("Location: payments.php");
         }   
     }
   }
@@ -184,7 +188,7 @@ if(isset($_POST['submit'])){
         <input type="hidden" name="id" value="<?php echo $row1['id']; ?>">
         <input type="hidden" name="prodId" value="<?php echo $row1['id']; ?>">
 										<button type="submit" name="submit" class="btn btn-warning" style="width:100%;">
-										<i class="fa fa-shopping-card"></i>Proceed To Mode Of Payment</button>
+										<i class="fa fa-shopping-cart"></i> Proceed To Mode Of Payment</button>
       </div>
       <div class="col-md-4 col-md-offset-1 well">
 
@@ -230,7 +234,12 @@ if(isset($_POST['submit'])){
             </tbody>
           </table>
           <hr>
-          <td>Cart Total :<span id="cTotal"></span></td>
+          <td class="ctotal">
+          <td class="cart_quantity"></td>
+            </td>
+            <td class="cart_total iTotal">
+            <p> Grand Total : $ <?php echo $product['mrp']*$product['qty'];?></p>
+       </td>
         <div class="text-right">
         </div>
       </div>
@@ -238,7 +247,7 @@ if(isset($_POST['submit'])){
   </form>
   <?php 
   	}else{ 
-      echo "<p align=center style=color:orange>Its Pretty Lonely in here Add Items Please ! :( </p> <br> ";
+      echo "<h5 align=center style=color:orange>Its Pretty Lonely in here Add Items Please ! :( </h5> <br> ";
 } ?>
 </div>
 
