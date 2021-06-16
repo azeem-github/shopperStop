@@ -1,94 +1,173 @@
 <?php
-require "config/config.php";
+if (session_status() !== PHP_SESSION_ACTIVE) {    session_start();   }
+require 'config/config.php';
+define('title', 'Payments | E-Shopper');
+include 'header.php';
 
-$member_id = 2; // you can your integerate authentication module here to get logged in member
-
-$shoppingCart = new ShoppingCart();
 ?>
-<HTML>
-<HEAD>
-<TITLE>Enriched Responsive Shopping Cart in PHP</TITLE>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href="style.css" type="text/css" rel="stylesheet" />
-</HEAD>
-<BODY>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+body {
+   font-family: Arial;
+   font-size: 15px;
+   padding: 4px;
+}
+* {
+   box-sizing: border-box;
+}
+.Fields {
+   display: flex;
+   flex-wrap: wrap;
+   padding: 10px;
+   justify-content: space-around;
+}
+.Fields div {
+   margin-right: 10px;
+}
+label {
+   margin: 15px;
+}
+.formContainer {
+   margin: 10px;
+   background-color: white;
+   padding: 5px 20px 15px 20px;
+   border: 1px solid rgb(191, 246, 250);
+   border-radius: 3px;
+}
+input[type="text"] {
+   display: inline-block;
+   width: 100%;
+   margin-bottom: 20px;
+   padding: 9px;
+   border: 1px solid #ccc;
+   border-radius: 3px;
+}
+label {
+   margin-left: 20px;
+   display: block;
+}
+.icon-formContainer {
+   margin-bottom: 20px;
+   padding: 7px 0;
+   font-size: 24px;
+}
+.checkout {
+   background-color: orange;
+   color : white;
+   padding: 12px;
+   margin: 10px 0;
+   border: none;
+   width: 100%;
+   border-radius: 3px;
+   cursor: pointer;
+   font-size: 17px;
+}
+.checkout:hover {
+   background-color: orange;
+}
+a {
+   color: black;
+}
+span.price {
+   float: right;
+   color: grey;
+}
+@media (max-width: 800px) {
+.Fields {
+   flex-direction: column-reverse;
+}
+}
+</style>
+</head>
+<body>
+
 <?php
-$cartItem = $shoppingCart->getMemberCartItem($member_id);
-$item_quantity = 0;
-$item_price = 0;
-if (! empty($cartItem)) {
-    if (! empty($cartItem)) {
-        foreach ($cartItem as $item) {
-            $item_quantity = $item_quantity + $item["quantity"];
-            $item_price = $item_price + ($item["price"] * $item["quantity"]);
-        }
+ $errorcardname = '';
+ $errorcardnumber = '';
+ $errorexpiryyear = '';
+ $errorexpirymonth = '';
+ $errorcvv = '';
+
+ if(isset($_POST['submit'])){
+
+    $cardname = $_POST['cardname'];
+    $cardnumber = $_POST['cardnumber'];
+    $expiryyear = $_POST['expyear'];
+    $expirymonth = $_POST['expmonth'];
+    $cvv = $_POST['cvv'];
+
+    if(empty($cardname)){
+       $errorcardname .= "Card Name Is Required";
     }
+    if(empty($cardnumber)){
+       $errorcardnumber .= "Card Number Is Required";
+    }
+
+    if(empty($expiryyear)){
+       $errorexpiryyear .= "Year Expiry Is A Must";
+    }
+    if(empty($expirymonth)){
+       $errorexpirymonth .= "Month Of Expiry Is A Must";
+    }
+
+    if ($cardnumber != ''){
+      $sql = "SELECT * FROM payments WHERE (cardnumber = '$cardnumber')";
+      $search = mysqli_query($conn, $sql);
+      $rows = mysqli_num_rows($search);
+      if($rows > 0){
+        $errorcardnumber .= "card Number already Exists";
+      } else{
+
+    $sql = "INSERT INTO payments (cardname, cardnumber, expyear, expmonth, cvv) VALUES ('$cardname', '$cardnumber', '$expiryyear', '$expirymonth',
+    '$cvv')";
+        $result = mysqli_query($conn, $sql);
+        if($result === TRUE){
+           header("Location: OrderDetail.php");
+            
+           echo "<script>alert('Successfull!');</script>";
+        }   
+    }
+   }
 }
 ?>
-<div id="shopping-cart">
-        <div class="txt-heading">
-            <div class="txt-heading-label">Shopping Cart</div>
 
-            <a id="btnEmpty" href="index.php?action=empty"><img
-                src="image/empty-cart.png" alt="empty-cart"
-                title="Empty Cart" class="float-right" /></a>
-            <div class="cart-status">
-                <div>Total Quantity: <?php echo $item_quantity; ?></div>
-                <div>Total Price: $ <?php echo $item_price; ?></div>
-            </div>
-        </div>
-        <?php
-        if (! empty($cartItem)) {
-            ?>
-<?php
-            require_once ("cart-list.php");
-            ?>
-<?php
-        } // End if !empty $cartItem
-        ?>
+<section id="cart_items">
+		<div class="container">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="index.php">Home</a></li>
+				  <li class="active"></li>
+				  </ol>
+				  </div><!--/breadcrums-->
 
+<h1 style="text-align: center;">Mode Of Payment</h1>
+<div class="formContainer">
+<form>
+<div>
+<h3>Payment:</h3>
+<br>
+<form action="" method="post">
+Card Name: <input type="text"  name="cardname" placeholder="Name On Card" /><span style="color:red";><?php echo $errorcardname;?></span></i>
+
+Card number: <input type="text" name="cardnumber" placeholder="1111-2222-8888" /><span style="color:red";><?php echo $errorcardnumber;?></span></i>
+
+Expiry Year: <input type="text" name="expyear" placeholder="2020"><span style="color:red";><?php echo $errorexp_year;?></span>
+
+Expiry Date<input type="text" name="expmonth" placeholder="SEPTEMBER"><span style="color:red";><?php echo $errorexp_month;?></span>
+
+CVV <input type="text" name="cvv" placeholder="XXX9999"><span style="color:red";><?php echo $errorcvv;?></span>
 </div>
-    <form name="frm_customer_detail" action="process-order.php" method="POST">
-    <div class="frm-heading">
-        <div class="txt-heading-label">Customer Details</div>
-    </div>
-    <div class="frm-customer-detail">
-        <div class="form-row">
-            <div class="input-field">
-                <input type="text" name="name" id="name"
-                    PlaceHolder="Customer Name" required>
-            </div>
 
-            <div class="input-field">
-                <input type="text" name="address" PlaceHolder="Address" required>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="input-field">
-                <input type="text" name="city" PlaceHolder="City" required>
-            </div>
-
-            <div class="input-field">
-                <input type="text" name="state" PlaceHolder="State" required>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="input-field">
-                <input type="text" name="zip" PlaceHolder="Zip Code" required>
-            </div>
-
-            <div class="input-field">
-                <input type="text" name="country" PlaceHolder="Country" required>
-            </div>
-        </div>
-    </div>
-    <div>
-        <input type="submit" class="btn-action"
-                name="proceed_payment" value="Proceed to Payment">
-    </div>
-    </form>
-</BODY>
-</HTML>
+<a href="OrderDetail.php" input type="submit" name="submit" class="btn btn-warning btn-block">Place Order</a>
+</div>
+</form>
+</div>
+</div>
+</section>
+</body>
+</html>
+<?php include 'footer.php'; ?>
