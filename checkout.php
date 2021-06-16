@@ -34,7 +34,7 @@ if(isset($_POST['delete'])){
 
 if(isset($_POST['check'])){
 	$_SESSION['prodId'] = $_POST['id'];
-   echo "<script>window.location.href='cart.php';</script>";
+   echo "<script>window.location.href='userDetails.php';</script>";
 
 }
 ?>
